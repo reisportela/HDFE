@@ -1,1 +1,1 @@
-vim libstd
+vim libstdc++6
