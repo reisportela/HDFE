@@ -2,7 +2,11 @@ channels:
   - conda-forge
 dependencies:
   - numpy
+  - pandas
   - pip
+  - pyhdfe
+  - statsmodels
+  - scikit-learn
   - r-base=4.1
   - r-haven
   - r-data.table
