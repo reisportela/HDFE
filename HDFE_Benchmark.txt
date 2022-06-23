@@ -1,0 +1,453 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/miguelportela/Documents/GitHub/fixed_effects_estimation/PRJS/HDFE_Benchmark.txt
+  log type:  text
+ opened on:  23 Jun 2022, 01:10:19
+r; t=0.00 1:10:19
+
+. 
+. /*
+> 
+> -- http://scorreia.com/software/reghdfe/
+> 
+>         * Install ftools (remove program if it existed previously)
+>         cap ado uninstall ftools
+>         net install ftools, from("https://raw.githubusercontent.com/sergiocorreia/ftools/master/src/")
+> 
+>         * Install reghdfe 6.x
+>         cap ado uninstall reghdfe
+>         net install reghdfe, from("https://raw.githubusercontent.com/sergiocorreia/reghdfe/master/src/")
+> 
+>         * Install parallel, if using the parallel() option; don't install from SSC
+>         cap ado uninstall parallel
+>         net install parallel, from(https://raw.github.com/gvegayon/parallel/stable/) replace
+>         mata mata mlib index
+> 
+>         cap ado uninstall ivreghdfe
+>         cap ssc install ivreg2 // Install ivreg2, the core package
+>         net install ivreghdfe, from(https://raw.githubusercontent.com/sergiocorreia/ivreghdfe/master/src/)
+> 
+> */
+. 
+. 
+. 
+. /*
+> webuse nlswork
+>         save nlswork, replace
+> */
+. 
+. use nlswork, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 1:10:19
+
+.         des
+
+Contains data from nlswork.dta
+ Observations:        28,534                  National Longitudinal Survey of Young Women, 14-24 years old in 1968
+    Variables:            21                  23 Jun 2022 00:46
+                                              (_dta has notes)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+idcode          int     %8.0g                 NLS ID
+year            byte    %8.0g                 Interview year
+birth_yr        byte    %8.0g                 Birth year
+age             byte    %8.0g                 Age in current year
+race            byte    %8.0g      racelbl    Race
+msp             byte    %8.0g                 1 if married, spouse present
+nev_mar         byte    %8.0g                 1 if never married
+grade           byte    %8.0g                 Current grade completed
+collgrad        byte    %8.0g                 1 if college graduate
+not_smsa        byte    %8.0g                 1 if not SMSA
+c_city          byte    %8.0g                 1 if central city
+south           byte    %8.0g                 1 if south
+ind_code        byte    %8.0g                 Industry of employment
+occ_code        byte    %8.0g                 Occupation
+union           byte    %8.0g                 1 if union
+wks_ue          byte    %8.0g                 Weeks unemployed last year
+ttl_exp         float   %9.0g                 Total work experience
+tenure          float   %9.0g                 Job tenure, in years
+hours           int     %8.0g                 Usual hours worked
+wks_work        int     %8.0g                 Weeks worked last year
+ln_wage         float   %9.0g                 ln(wage/GNP deflator)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorted by: idcode  year
+r; t=0.00 1:10:19
+
+.         sort idcode year
+r; t=0.00 1:10:19
+
+.         xtset idcode year
+
+Panel variable: idcode (unbalanced)
+ Time variable: year, 68 to 88, but with gaps
+         Delta: 1 unit
+r; t=0.02 1:10:19
+
+.         xtdes
+
+  idcode:  1, 2, ..., 5159                                   n =       4711
+    year:  68, 69, ..., 88                                   T =         15
+           Delta(year) = 1 unit
+           Span(year)  = 21 periods
+           (idcode*year uniquely identifies each observation)
+
+Distribution of T_i:   min      5%     25%       50%       75%     95%     max
+                         1       1       3         5         9      13      15
+
+     Freq.  Percent    Cum. |  Pattern
+ ---------------------------+-----------------------
+      136      2.89    2.89 |  1....................
+      114      2.42    5.31 |  ....................1
+       89      1.89    7.20 |  .................1.11
+       87      1.85    9.04 |  ...................11
+       86      1.83   10.87 |  111111.1.11.1.11.1.11
+       61      1.29   12.16 |  ..............11.1.11
+       56      1.19   13.35 |  11...................
+       54      1.15   14.50 |  ...............1.1.11
+       54      1.15   15.64 |  .......1.11.1.11.1.11
+     3974     84.36  100.00 | (other patterns)
+ ---------------------------+-----------------------
+     4711    100.00         |  XXXXXX.X.XX.X.XX.X.XX
+r; t=0.15 1:10:19
+
+.         xtsum
+
+Variable         |      Mean   Std. dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+idcode   overall |  2601.284   1487.359          1       5159 |     N =   28534
+         between |              1487.57          1       5159 |     n =    4711
+         within  |                    0   2601.284   2601.284 | T-bar = 6.05689
+                 |                                            |
+year     overall |  77.95865   6.383879         68         88 |     N =   28534
+         between |             5.156521         68         88 |     n =    4711
+         within  |             5.138271   63.79198   92.70865 | T-bar = 6.05689
+                 |                                            |
+birth_yr overall |  48.08509   3.012837         41         54 |     N =   28534
+         between |             3.051795         41         54 |     n =    4711
+         within  |                    0   48.08509   48.08509 | T-bar = 6.05689
+                 |                                            |
+age      overall |  29.04511   6.700584         14         46 |     N =   28510
+         between |             5.485756         14         45 |     n =    4710
+         within  |              5.16945   14.79511   43.79511 | T-bar = 6.05308
+                 |                                            |
+race     overall |  1.303392   .4822773          1          3 |     N =   28534
+         between |             .4862111          1          3 |     n =    4711
+         within  |                    0   1.303392   1.303392 | T-bar = 6.05689
+                 |                                            |
+msp      overall |  .6029175   .4893019          0          1 |     N =   28518
+         between |             .3982385          0          1 |     n =    4711
+         within  |             .3238927  -.3304159   1.536251 | T-bar = 6.05349
+                 |                                            |
+nev_mar  overall |  .2296795   .4206341          0          1 |     N =   28518
+         between |             .3684416          0          1 |     n =    4711
+         within  |             .2456558  -.7036538   1.163013 | T-bar = 6.05349
+                 |                                            |
+grade    overall |  12.53259   2.323905          0         18 |     N =   28532
+         between |             2.566536          0         18 |     n =    4709
+         within  |                    0   12.53259   12.53259 | T-bar = 6.05904
+                 |                                            |
+collgrad overall |  .1680451   .3739129          0          1 |     N =   28534
+         between |             .4045558          0          1 |     n =    4711
+         within  |                    0   .1680451   .1680451 | T-bar = 6.05689
+                 |                                            |
+not_smsa overall |  .2824441   .4501961          0          1 |     N =   28526
+         between |             .4111053          0          1 |     n =    4711
+         within  |             .1834446  -.6461273   1.215777 | T-bar = 6.05519
+                 |                                            |
+c_city   overall |   .357218   .4791882          0          1 |     N =   28526
+         between |             .4271586          0          1 |     n =    4711
+         within  |             .2490022  -.5761154   1.290551 | T-bar = 6.05519
+                 |                                            |
+south    overall |  .4095562   .4917605          0          1 |     N =   28526
+         between |             .4667982          0          1 |     n =    4711
+         within  |             .1597932  -.5237771    1.34289 | T-bar = 6.05519
+                 |                                            |
+ind_code overall |  7.692973   2.994025          1         12 |     N =   28193
+         between |             2.542844          1         12 |     n =    4695
+         within  |             1.708429  -1.507027   17.12154 | T-bar =  6.0049
+                 |                                            |
+occ_code overall |  4.777672   3.065435          1         13 |     N =   28413
+         between |              2.86512          1         13 |     n =    4699
+         within  |             1.650248  -5.522328   15.44434 | T-bar = 6.04661
+                 |                                            |
+union    overall |  .2344319   .4236542          0          1 |     N =   19238
+         between |             .3341803          0          1 |     n =    4150
+         within  |             .2668622  -.6822348   1.151099 | T-bar = 4.63566
+                 |                                            |
+wks_ue   overall |  2.548095   7.294463          0         76 |     N =   22830
+         between |             5.181437          0         76 |     n =    4645
+         within  |                6.054  -33.95191   64.38143 | T-bar = 4.91496
+                 |                                            |
+ttl_exp  overall |  6.215316   4.652117          0   28.88461 |     N =   28534
+         between |             3.724221          0    24.7062 |     n =    4711
+         within  |             3.484133  -9.642671   20.38091 | T-bar = 6.05689
+                 |                                            |
+tenure   overall |  3.123836   3.751409          0   25.91667 |     N =   28101
+         between |             2.796519          0   21.16667 |     n =    4699
+         within  |             2.659784  -14.27894   15.62384 | T-bar = 5.98021
+                 |                                            |
+hours    overall |  36.55956   9.869623          1        168 |     N =   28467
+         between |             7.846585          1       83.5 |     n =    4710
+         within  |             7.520712  -2.154726   130.0596 | T-bar = 6.04395
+                 |                                            |
+wks_work overall |  53.98933   29.03232          0        104 |     N =   27831
+         between |             20.64508          0        104 |     n =    4686
+         within  |             23.96999  -18.43924    131.156 | T-bar = 5.93918
+                 |                                            |
+ln_wage  overall |  1.674907   .4780935          0   5.263916 |     N =   28534
+         between |              .424569          0   3.912023 |     n =    4711
+         within  |               .29266  -.4077221    4.78367 | T-bar = 6.05689
+r; t=0.11 1:10:19
+
+. 
+.         // -- DEFINE A COMMON SAMPLE
+.         
+.         egen nmiss = rowmiss(ln_wage ttl_exp union not_smsa nev_mar occ_code south idcode year)
+r; t=0.00 1:10:19
+
+.                 tab nmiss
+
+      nmiss |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     19,151       67.12       67.12
+          1 |      9,322       32.67       99.79
+          2 |         56        0.20       99.98
+          3 |          5        0.02      100.00
+------------+-----------------------------------
+      Total |     28,534      100.00
+r; t=0.00 1:10:19
+
+.                         keep if nmiss == 0
+(9,383 observations deleted)
+r; t=0.00 1:10:19
+
+.                         drop nmiss
+r; t=0.00 1:10:19
+
+.         
+.         keep ln_wage ttl_exp union not_smsa nev_mar occ_code south idcode year
+r; t=0.00 1:10:19
+
+.         compress
+  (0 bytes saved)
+r; t=0.00 1:10:19
+
+.         order idcode year
+r; t=0.00 1:10:19
+
+.         sort idcode year
+r; t=0.00 1:10:19
+
+.         xtset idcode year
+
+Panel variable: idcode (unbalanced)
+ Time variable: year, 70 to 88, but with gaps
+         Delta: 1 unit
+r; t=0.00 1:10:19
+
+.         save nlswork_regression, replace
+file nlswork_regression.dta saved
+r; t=0.00 1:10:19
+
+. 
+. // -- START -- //
+.         timer on 1
+r; t=0.00 1:10:19
+
+.         
+. **# 1. Simple case - one fixed effect
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 1 HDFE group                            F(   4,  15005) =     587.66
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7529
+                                                  Adj R-squared   =     0.6957
+                                                  Within R-sq.    =     0.1354
+                                                  Root MSE        =     0.2562
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0005831    42.42   0.000     .0235937    .0258798
+       union |   .1020091   .0069487    14.68   0.000     .0883887    .1156294
+    not_smsa |  -.1006281   .0124436    -8.09   0.000    -.1250191   -.0762371
+     nev_mar |  -.0051586   .0099787    -0.52   0.605    -.0247181    .0144009
+       _cons |   1.572064   .0069678   225.62   0.000     1.558407    1.585722
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+-----------------------------------------------------+
+r; t=0.20 1:10:19
+
+.                 est store HDFE1
+r; t=0.00 1:10:19
+
+. 
+. 
+. **# 2. As above, but also compute clustered standard errors
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode) vce(cluster south)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 1 iterations)
+warning: missing F statistic; dropped variables due to collinearity or too few clusters
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 1 HDFE group                            F(   4,      1) =          .
+Statistics robust to heteroskedasticity           Prob > F        =          .
+                                                  R-squared       =     0.7529
+                                                  Adj R-squared   =     0.6957
+                                                  Within R-sq.    =     0.1354
+Number of clusters (south)   =          2         Root MSE        =     0.2562
+
+                                  (Std. err. adjusted for 2 clusters in south)
+------------------------------------------------------------------------------
+             |               Robust
+     ln_wage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0007412    33.38   0.019     .0153195    .0341541
+       union |   .1020091   .0043837    23.27   0.027     .0463083    .1577099
+    not_smsa |  -.1006281   .0358624    -2.81   0.218    -.5563032     .355047
+     nev_mar |  -.0051586   .0160181    -0.32   0.802    -.2086881    .1983708
+       _cons |   1.572064   .0032364   485.74   0.001     1.530942    1.613187
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+-----------------------------------------------------+
+r; t=0.02 1:10:19
+
+.                 est store HDFE1cluster
+r; t=0.00 1:10:19
+
+. 
+. 
+. **# 3. Two and three sets of fixed effects
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.12 1:10:20
+
+.                 est store HDFE2
+r; t=0.00 1:10:20
+
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year occ_code)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 17 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 3 HDFE groups                           F(   4,  14982) =     245.28
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7636
+                                                  Adj R-squared   =     0.7083
+                                                  Within R-sq.    =     0.0615
+                                                  Root MSE        =     0.2508
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |    .041726   .0015802    26.41   0.000     .0386286    .0448234
+       union |   .0922451   .0068775    13.41   0.000     .0787644    .1057258
+    not_smsa |  -.0959395   .0122072    -7.86   0.000    -.1198672   -.0720118
+     nev_mar |  -.0210052   .0100888    -2.08   0.037    -.0407804     -.00123
+       _cons |   1.443052   .0133288   108.27   0.000     1.416926    1.469178
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+    occ_code |        13           1          12    ?|
+-----------------------------------------------------+
+? = number of redundant parameters may be higher
+r; t=0.14 1:10:20
+
+.                 est store HDFE3
+r; t=0.00 1:10:20
+
+. 
+. 
+. **# 4. Advanced examples
+. 
+. **# 4.1 Save the FEs as variables
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(FE1=idcode FE2=year)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.08 1:10:20
+
+.                 est store HDFE4
+r; t=0.00 1:10:20
+
+. 
+end of do-file
+
+r; t=0.99 1:10:20

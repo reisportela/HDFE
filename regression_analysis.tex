@@ -1,0 +1,26 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{6}{c}}
+\hline\hline
+            &\multicolumn{1}{c}{Model (1)}&\multicolumn{1}{c}{Model (2)}&\multicolumn{1}{c}{Model (3)}&\multicolumn{1}{c}{Model (4)}&\multicolumn{1}{c}{Model (5)}&\multicolumn{1}{c}{Model (6)}\\
+\hline
+Experience  &      0.0247\sym{***}&      0.0247\sym{**} &      0.0437\sym{***}&      0.0417\sym{***}&      0.0437\sym{***}&      0.0227\sym{***}\\
+            &   (0.00058)         &   (0.00074)         &   (0.00160)         &   (0.00158)         &   (0.00160)         &   (0.00059)         \\
+[1em]
+Union       &      0.1020\sym{***}&      0.1020\sym{**} &      0.1012\sym{***}&      0.0922\sym{***}&      0.1012\sym{***}&      0.0627\sym{***}\\
+            &   (0.00695)         &   (0.00438)         &   (0.00693)         &   (0.00688)         &   (0.00693)         &   (0.00707)         \\
+[1em]
+Not SMSA    &     -0.1006\sym{***}&     -0.1006         &     -0.0940\sym{***}&     -0.0959\sym{***}&     -0.0940\sym{***}&     -0.0772\sym{***}\\
+            &   (0.01244)         &   (0.03586)         &   (0.01238)         &   (0.01221)         &   (0.01238)         &   (0.01324)         \\
+[1em]
+Never married&     -0.0052         &     -0.0052         &     -0.0213\sym{**} &     -0.0210\sym{**} &     -0.0213\sym{**} &      0.0088         \\
+            &   (0.00998)         &   (0.01602)         &   (0.01023)         &   (0.01009)         &   (0.01023)         &   (0.00999)         \\
+\hline
+\(N\)       &       18486         &       18486         &       18486         &       18486         &       18486         &       16341         \\
+R$^2$       &        0.75         &        0.75         &        0.76         &        0.76         &        0.76         &        0.82         \\
+RSS         &      985.21         &      985.21         &      971.94         &      942.74         &      971.94         &      609.28         \\
+\hline\hline
+\multicolumn{7}{l}{\footnotesize Notes: standard errors in parenthesis. Significance levels: *, 10\%; **, 5\%; ***, 1\%. The dependent variable is}\\
+\multicolumn{7}{l}{\footnotesize log wage. SMSA: standard metropolitan statistical area. Model (7) is estimated by bootstrap. Source: own computations.}\\
+\end{tabular}
+}
