@@ -3,3 +3,12 @@ channels:
 dependencies:
   - numpy
   - pip
+  - r-base=4.1
+  - r-haven
+  - r-data.table
+  - r-MASS
+  - r-lfe
+  - r-glmmML
+  - r-alpaca
+  - r-plm
+  - r-fixest
