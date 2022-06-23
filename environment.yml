@@ -9,6 +9,6 @@ dependencies:
   - r-MASS
   - r-lfe
   - r-glmmML
-  - r-alpaca
+  - r-rcpp
   - r-plm
   - r-fixest
