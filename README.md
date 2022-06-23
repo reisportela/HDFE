@@ -1,18 +1,20 @@
 # HDFE
 
-MyBinder::RStudio
+### MyBinder::RStudio
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?urlpath=rstudio)
 
-
-MyBinder::JupyterNotebook
+### MyBinder::JupyterNotebook
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD)
+
+### Julia Notebook
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?labpath=Julia_FixedEffectModels_JupyterNotebook_Benchmark.ipynb)
+
+
+### Notes
 
 [https://mybinder.readthedocs.io/en/latest/using/config_files.html#start-run-code-before-the-user-sessions-starts](https://mybinder.readthedocs.io/en/latest/using/config_files.html#start-run-code-before-the-user-sessions-starts)
 
 [https://discourse.jupyter.org/t/glibcxx-3-4-26-not-found-from-rstudio/7778/4](https://discourse.jupyter.org/t/glibcxx-3-4-26-not-found-from-rstudio/7778/4)
-
-Notebook
-
-[https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?labpath=Julia_FixedEffectModels_JupyterNotebook_Benchmark.ipynb](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?labpath=Julia_FixedEffectModels_JupyterNotebook_Benchmark.ipynb)
