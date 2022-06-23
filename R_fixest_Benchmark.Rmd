@@ -34,7 +34,7 @@ library(data.table)
 library(MASS)
 library(lfe)
 library(glmmML)
-library(alpaca)
+#library(alpaca)
 library(plm)
 library(haven)
 
@@ -47,7 +47,7 @@ library(fixest)
 # The simulated data sets (see script "Data generation.R" for details on the generation process)
 
 ```{r}
-load("_BENCHMARK/DATA/base_all_simulations.Rdata")
+#load("_BENCHMARK/DATA/base_all_simulations.Rdata")
 
 
 nlswork_regression <- read_dta("~/Documents/GitHub/HDFE/nlswork_regression.dta")
