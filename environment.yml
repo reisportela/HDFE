@@ -2,9 +2,4 @@ channels:
   - conda-forge
 dependencies:
   - numpy
-  - scipy
-  - matplotlib
-  - numba
-  - sympy
-  - nbgitpuller
   - pip
