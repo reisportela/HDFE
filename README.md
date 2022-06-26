@@ -30,7 +30,7 @@ Launch MyBinder with RStudio
 
 ### The data -- LEED sample
 
-<img src="the_Data_Benchmark.png" width="200">
+<img src="the_Data_Benchmark.png" width="400">
 
 
 ### R -- the state of the art
