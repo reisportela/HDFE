@@ -1,23 +1,43 @@
 # HDFE
 
+Show the repository on [GitHub](https://github.com/): [https://github.com/reisportela/HDFE](https://github.com/reisportela/HDFE)
 
-### MyBinder::RStudio
+## 1. Use [MyBinder](https://mybinder.org/) to run a container with R & RStudio + Julia
+
+Launch MyBinder with RStudio
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?urlpath=rstudio)
 
-### MyBinder::JupyterNotebook
+## 2. Explore `fixest` in RStudio ecosystem
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD)
+## 3. Open Visual Studio Code (locally)
 
-### Julia Notebook
+> Run the Julia script `HDFE_Julia_script.jl`
+
+## 4. Run Jupyter Lab (locally)
+
+> and run the Julia notebook `HDFE_Julia_script.ipynb`
+
+## 5. Use MyBinder to run the Julia Notebook
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?labpath=HDFE_Julia.ipynb)
+
+## 6. Discuss SoS notebook: computation time using Python, R, Julia and Stata (PRJS)
+
+> Windows server: run the notebook `All_In_One_Python_R_Julia_Stata_FULL.ipynb`
+
+> Python is too slow: run in the sample using the notebook `HDFE_Python.ipynb` using VSCode
+
+
+<!--- 
+## MyBinder::Just Jupyter notebook
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD)
 
 
 ### Notes
 
-[myBinder](https://mybinder.org/)
-
 [https://mybinder.readthedocs.io/en/latest/using/config_files.html#start-run-code-before-the-user-sessions-starts](https://mybinder.readthedocs.io/en/latest/using/config_files.html#start-run-code-before-the-user-sessions-starts)
 
 [https://discourse.jupyter.org/t/glibcxx-3-4-26-not-found-from-rstudio/7778/4](https://discourse.jupyter.org/t/glibcxx-3-4-26-not-found-from-rstudio/7778/4)
+-->
