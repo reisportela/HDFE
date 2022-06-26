@@ -1,5 +1,6 @@
 # HDFE
 
+
 ### MyBinder::RStudio
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?urlpath=rstudio)
@@ -14,6 +15,8 @@
 
 
 ### Notes
+
+[myBinder](https://mybinder.org/)
 
 [https://mybinder.readthedocs.io/en/latest/using/config_files.html#start-run-code-before-the-user-sessions-starts](https://mybinder.readthedocs.io/en/latest/using/config_files.html#start-run-code-before-the-user-sessions-starts)
 
