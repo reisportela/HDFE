@@ -28,9 +28,10 @@ Launch MyBinder with RStudio
 
 > Python is too slow: run in the sample using the notebook `HDFE_Python.ipynb` using VSCode
 
-### The data
+### The data -- LEED sample
 
-![LEED sample](the_Data_Benchmark.png)
+<img src="the_Data_Benchmark.png" width="200">
+
 
 ### R -- the state of the art
 
