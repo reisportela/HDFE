@@ -35,13 +35,13 @@ LEED sample.
 <img src="the_Data_Benchmark.png" width="400">
 
 
-### R -- the state of the art
+### R: the state of the art
 
-The fastest solution.
+The fastest solution with an awesome ecosystem.
 
 ![](R_performance.png)
 
-### Julia -- fast but lacks an adequate ecosystem
+### Julia: fast but lacks an adequate ecosystem
 
 Not bad.
 
@@ -53,7 +53,7 @@ Too slow.
 
 ![](Stata_performance.png)
 
-### Python -- just a concept
+### Python: just a concept
 
 Forget it.
 
