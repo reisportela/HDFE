@@ -1053,19 +1053,19 @@ rbind(gamma, exp(fixef(result_NL_fe)$id[as.character(1:20)]))</code></pre>
 # 1 nthreads: 3.13s
 system.time(fenegbin(Euros ~ log(dist_km)|Origin+Destination+Product+Year, trade, nthreads = 1))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.842   0.008   0.853</code></pre>
+##   0.837   0.008   0.846</code></pre>
 <pre class="r"><code># 2 nthreads: 1.82s
 system.time(fenegbin(Euros ~ log(dist_km)|Origin+Destination+Product+Year, trade, nthreads = 2))</code></pre>
 <pre><code>## Warning: In fixest_env(fml = fml, data = data, family = famil...:
 ##  OpenMP not detected: cannot use 2 threads, single-threaded mode instead.</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.815   0.008   0.823</code></pre>
+##   0.824   0.010   0.836</code></pre>
 <pre class="r"><code># 4 nthreads: 1.17s
 system.time(fenegbin(Euros ~ log(dist_km)|Origin+Destination+Product+Year, trade, nthreads = 4))</code></pre>
 <pre><code>## Warning: In fixest_env(fml = fml, data = data, family = famil...:
 ##  OpenMP not detected: cannot use 4 threads, single-threaded mode instead.</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.813   0.004   0.817</code></pre>
+##   0.810   0.006   0.816</code></pre>
 </div>
 </div>
 

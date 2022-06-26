@@ -91,3 +91,34 @@
 \par\endgroup
 
 
+
+\begingroup
+\centering
+\begin{tabular}{lcccc}
+   \tabularnewline \midrule \midrule
+   Dependent Variable: & \multicolumn{4}{c}{Euros}\\
+   Model:              & (1)                   & (2)                   & (3)                   & (4)\\  
+   \midrule
+   \emph{Variables}\\
+   Constant            & 24.71$^{***}$         &                       &                       &   \\   
+                       & (1.125)               &                       &                       &   \\   
+   log(dist\_km)       & -1.029$^{***}$        & -1.029$^{***}$        & -1.226$^{***}$        & -1.518$^{***}$\\   
+                       & (0.1580)              & (0.1581)              & (0.2045)              & (0.1282)\\   
+   \midrule
+   \emph{Fixed-effects}\\
+   Year                &                       & Yes                   & Yes                   & Yes\\  
+   Destination         &                       &                       & Yes                   & Yes\\  
+   Origin              &                       &                       &                       & Yes\\  
+   \midrule
+   \emph{Fit statistics}\\
+   Observations        & 38,325                & 38,325                & 38,325                & 38,325\\  
+   Squared Correlation & 0.05511               & 0.05711               & 0.16420               & 0.38479\\  
+   Pseudo R$^2$        & 0.18502               & 0.18833               & 0.35826               & 0.59312\\  
+   BIC                 & $4.85\times 10^{12}$  & $4.83\times 10^{12}$  & $3.82\times 10^{12}$  & $2.42\times 10^{12}$\\   
+   \midrule \midrule
+   \multicolumn{5}{l}{\emph{Clustered (Origin \& Destination) standard-errors in parentheses}}\\
+   \multicolumn{5}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+\end{tabular}
+\par\endgroup
+
+
