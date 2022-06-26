@@ -10,7 +10,7 @@ capture cd "B:/GitHub/HDFE"
 capture cd "/Users/miguelportela/Documents/GitHub/HDFE"
 
 capture log close
-log using HDFE_Benchmark_V0.txt, text replace
+log using HDFE_Benchmark_clean.txt, text replace
 
 /*
 
