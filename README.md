@@ -30,7 +30,7 @@ Launch MyBinder with RStudio
 
 ### The data
 
-LEED sample.
+LEED sample: 19,747,353 observations; 3,747,353 workers; 472,880 firms; 10 years (yearly data).
 
 <img src="the_Data_Benchmark.png" width="400">
 
