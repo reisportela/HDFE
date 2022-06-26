@@ -52,7 +52,7 @@ The fastest solution with an awesome ecosystem: 411.21 seconds (6.9 minutes).
 
 ### Julia: fast but lacks an adequate ecosystem
 
-Not bad: 962.9 seconds (16.1 minutes).
+Not bad: 962.9 seconds (16.1 minutes)..
 
 <img src="Julia_performance_V2.png" width="1300">
 
