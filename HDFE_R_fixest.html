@@ -182,8 +182,8 @@ pre code {
 rm(list = ls())
 gc()</code></pre>
 <pre><code>##          used (Mb) gc trigger (Mb) limit (Mb) max used (Mb)
-## Ncells 507502 27.2    1115485 59.6         NA   669040 35.8
-## Vcells 938926  7.2    8388608 64.0      16384  1839107 14.1</code></pre>
+## Ncells 507536 27.2    1115645 59.6         NA   668914 35.8
+## Vcells 939062  7.2    8388608 64.0      16384  1838910 14.1</code></pre>
 <pre class="r"><code>library(here)</code></pre>
 <pre><code>## here() starts at /Users/miguelportela/Documents/GitHub/HDFE</code></pre>
 <pre class="r"><code>library(tictoc)
@@ -199,7 +199,8 @@ library(plm)</code></pre>
 
 library(fixest)</code></pre>
 <pre class="r"><code>data(trade)
-nls &lt;- read_dta(&quot;nlswork_regression.dta&quot;)</code></pre>
+nls &lt;- read_dta(&quot;nlswork_regression.dta&quot;)
+nls_nos &lt;- read_dta(&quot;nlswork_regression_nosingleton.dta&quot;)</code></pre>
 <pre class="r"><code>gravity_pois = fepois(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)</code></pre>
 <pre class="r"><code>summary(gravity_pois, vcov = &quot;twoway&quot;)</code></pre>
 <pre><code>## Poisson estimation, Dep. Var.: Euros
@@ -313,21 +314,56 @@ summary(wages_plm)</code></pre>
 ## R-Squared:      0.13544
 ## Adj. R-Squared: -0.10339
 ## F-statistic: 587.66 on 4 and 15005 DF, p-value: &lt; 2.22e-16</code></pre>
-<pre class="r"><code>wages_feols &lt;- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode + year,nls)
-summary(wages_feols)</code></pre>
+<pre class="r"><code># Stata: reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(cluster idcode)
+wages_feols &lt;- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode + year,nls,fixef.tol = 1e-6,fixef.iter = 200,fixef.rm = &quot;singleton&quot;)</code></pre>
+<pre><code>## NOTE: 665 fixed-effect singletons were removed (665 observations, breakup: 665/0).</code></pre>
+<pre class="r"><code>summary(wages_feols)</code></pre>
 <pre><code>## OLS estimation, Dep. Var.: ln_wage
-## Observations: 19,151 
-## Fixed-effects: idcode: 4,142,  year: 12
+## Observations: 18,486 
+## Fixed-effects: idcode: 3,477,  year: 12
 ## Standard-errors: Clustered (idcode) 
 ##           Estimate Std. Error  t value   Pr(&gt;|t|)    
-## ttl_exp   0.043670   0.002339 18.67195  &lt; 2.2e-16 ***
-## union     0.101249   0.009467 10.69461  &lt; 2.2e-16 ***
-## not_smsa -0.094031   0.018763 -5.01161 5.6229e-07 ***
-## nev_mar  -0.021284   0.013756 -1.54726 1.2188e-01    
+## ttl_exp   0.043670   0.002339 18.67126  &lt; 2.2e-16 ***
+## union     0.101249   0.009468 10.69421  &lt; 2.2e-16 ***
+## not_smsa -0.094031   0.018763 -5.01143 5.6723e-07 ***
+## nev_mar  -0.021284   0.013756 -1.54720 1.2191e-01    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## RMSE: 0.22528     Adj. R2: 0.703661
-##                 Within R2: 0.066289</code></pre>
+## RMSE: 0.229296     Adj. R2: 0.699529
+##                  Within R2: 0.066289</code></pre>
+<pre class="r"><code># print(wages_feols)</code></pre>
+<pre class="r"><code># reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+wages_feols &lt;- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode + year,nls,fixef.tol = 1e-6,fixef.iter = 200,fixef.rm = &quot;singleton&quot;, vcov = &quot;iid&quot;)</code></pre>
+<pre><code>## NOTE: 665 fixed-effect singletons were removed (665 observations, breakup: 665/0).</code></pre>
+<pre class="r"><code>summary(wages_feols)</code></pre>
+<pre><code>## OLS estimation, Dep. Var.: ln_wage
+## Observations: 18,486 
+## Fixed-effects: idcode: 3,477,  year: 12
+## Standard-errors: IID 
+##           Estimate Std. Error  t value   Pr(&gt;|t|)    
+## ttl_exp   0.043670   0.001598 27.33510  &lt; 2.2e-16 ***
+## union     0.101249   0.006927 14.61737  &lt; 2.2e-16 ***
+## not_smsa -0.094031   0.012376 -7.59795 3.1861e-14 ***
+## nev_mar  -0.021284   0.010230 -2.08055 3.7492e-02 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## RMSE: 0.229296     Adj. R2: 0.699529
+##                  Within R2: 0.066289</code></pre>
+<pre class="r"><code># print(wages_feols)</code></pre>
+<pre class="r"><code>summary(wages_feols, vcov = &quot;twoway&quot;)</code></pre>
+<pre><code>## OLS estimation, Dep. Var.: ln_wage
+## Observations: 18,486 
+## Fixed-effects: idcode: 3,477,  year: 12
+## Standard-errors: Clustered (idcode &amp; year) 
+##           Estimate Std. Error  t value   Pr(&gt;|t|)    
+## ttl_exp   0.043670   0.002856 15.29188 9.3025e-09 ***
+## union     0.101249   0.014018  7.22258 1.7027e-05 ***
+## not_smsa -0.094031   0.015765 -5.96468 9.3914e-05 ***
+## nev_mar  -0.021284   0.014301 -1.48828 1.6478e-01    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## RMSE: 0.229296     Adj. R2: 0.699529
+##                  Within R2: 0.066289</code></pre>
 <pre class="r"><code>gravity_negbin = fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)</code></pre>
 <pre class="r"><code>etable(gravity_pois, gravity_negbin, gravity_ols,
          vcov = &quot;twoway&quot;, headers = c(&quot;Poisson&quot;, &quot;Negative Binomial&quot;, &quot;Gaussian&quot;))</code></pre>
@@ -342,7 +378,7 @@ summary(wages_feols)</code></pre>
          headers = c(&quot;fixest&quot;))</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":[""],"name":[1],"type":["chr"],"align":["left"]},{"label":["wages_feols"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"","2":"fixest","_rn_":"1"},{"1":"Dependent Var.:","2":"ln_wage","_rn_":"2"},{"1":"","2":"","_rn_":"3"},{"1":"ttl_exp","2":"0.0437*** (0.0023)","_rn_":"4"},{"1":"union","2":"0.1012*** (0.0095)","_rn_":"5"},{"1":"not_smsa","2":"-0.0940*** (0.0188)","_rn_":"6"},{"1":"nev_mar","2":"-0.0213 (0.0138)","_rn_":"7"},{"1":"Fixed-Effects:","2":"-------------------","_rn_":"8"},{"1":"idcode","2":"Yes","_rn_":"9"},{"1":"year","2":"Yes","_rn_":"10"},{"1":"_______________","2":"___________________","_rn_":"11"},{"1":"S.E.: Clustered","2":"by: idcode","_rn_":"12"},{"1":"Observations","2":"19,151","_rn_":"13"},{"1":"R2","2":"0.76797","_rn_":"14"},{"1":"Within R2","2":"0.06629","_rn_":"15"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":[""],"name":[1],"type":["chr"],"align":["left"]},{"label":["wages_feols"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"","2":"fixest","_rn_":"1"},{"1":"Dependent Var.:","2":"ln_wage","_rn_":"2"},{"1":"","2":"","_rn_":"3"},{"1":"ttl_exp","2":"0.0437*** (0.0016)","_rn_":"4"},{"1":"union","2":"0.1012*** (0.0069)","_rn_":"5"},{"1":"not_smsa","2":"-0.0940*** (0.0124)","_rn_":"6"},{"1":"nev_mar","2":"-0.0213* (0.0102)","_rn_":"7"},{"1":"Fixed-Effects:","2":"-------------------","_rn_":"8"},{"1":"idcode","2":"Yes","_rn_":"9"},{"1":"year","2":"Yes","_rn_":"10"},{"1":"_______________","2":"___________________","_rn_":"11"},{"1":"S.E. type","2":"IID","_rn_":"12"},{"1":"Observations","2":"18,486","_rn_":"13"},{"1":"R2","2":"0.75627","_rn_":"14"},{"1":"Within R2","2":"0.06629","_rn_":"15"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>gravity_subfe = list()
@@ -742,7 +778,12 @@ est_comb</code></pre>
 ##     3.800694     4.003367     3.745539     3.575086     4.513272     3.986351 
 ##  virginica_c  virginica_d  virginica_e 
 ##     4.423725     4.216804     4.159382</code></pre>
-<p><code>{r A.4.1.2 Varying slopes (fe[x]) } head(base)</code></p>
+<pre class="r"><code>head(base)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["y"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["x1"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["x2"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["x3"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["fe1"],"name":[5],"type":["fct"],"align":["left"]},{"label":["fe2"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"5.1","2":"3.5","3":"1.4","4":"0.2","5":"setosa","6":"a","_rn_":"1"},{"1":"4.9","2":"3.0","3":"1.4","4":"0.2","5":"setosa","6":"b","_rn_":"2"},{"1":"4.7","2":"3.2","3":"1.3","4":"0.2","5":"setosa","6":"c","_rn_":"3"},{"1":"4.6","2":"3.1","3":"1.5","4":"0.2","5":"setosa","6":"d","_rn_":"4"},{"1":"5.0","2":"3.6","3":"1.4","4":"0.2","5":"setosa","6":"e","_rn_":"5"},{"1":"5.4","2":"3.9","3":"1.7","4":"0.4","5":"setosa","6":"a","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <pre class="r"><code>est_vs = feols(y ~ x1 | fe1[x2], base)
 est_vs</code></pre>
 <pre><code>## OLS estimation, Dep. Var.: y
@@ -770,6 +811,8 @@ est_vs</code></pre>
 ## -----
 ##   x2 (slopes: fe1): setosa versicolor virginica
 ##                     0.3677     0.6598    0.8903</code></pre>
+<div id="a.4.2-interactions-that-dont-involve-fixed-effects" class="section level4">
+<h4>A.4.2 Interactions that don’t involve fixed-effects</h4>
 <pre class="r"><code>data(airquality)
 res_i1 = feols(Ozone ~ Solar.R + i(Month), airquality)</code></pre>
 <pre><code>## NOTE: 42 observations removed because of NA values (LHS: 37, RHS: 7).</code></pre>
@@ -863,6 +906,9 @@ head(etable(res_sa20, agg = FALSE), 20)</code></pre>
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":[""],"name":[1],"type":["chr"],"align":["left"]},{"label":["res_sa20"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"Dependent Var.:","2":"y","_rn_":"1"},{"1":"","2":"","_rn_":"2"},{"1":"x1","2":"0.9947*** (0.0184)","_rn_":"3"},{"1":"year = -9 x cohort = 10","2":"0.3518 (0.3591)","_rn_":"4"},{"1":"year = -8 x cohort = 9","2":"0.0339 (0.4714)","_rn_":"5"},{"1":"year = -8 x cohort = 10","2":"-0.1919 (0.3529)","_rn_":"6"},{"1":"year = -7 x cohort = 8","2":"-0.5894 (0.7369)","_rn_":"7"},{"1":"year = -7 x cohort = 9","2":"0.8730. (0.4934)","_rn_":"8"},{"1":"year = -7 x cohort = 10","2":"0.0195 (0.6034)","_rn_":"9"},{"1":"year = -6 x cohort = 7","2":"-0.0421 (0.8657)","_rn_":"10"},{"1":"year = -6 x cohort = 8","2":"-0.6576 (0.5733)","_rn_":"11"},{"1":"year = -6 x cohort = 9","2":"0.8777 (0.5333)","_rn_":"12"},{"1":"year = -6 x cohort = 10","2":"-0.4036 (0.3474)","_rn_":"13"},{"1":"year = -5 x cohort = 6","2":"-0.6580 (0.9134)","_rn_":"14"},{"1":"year = -5 x cohort = 7","2":"-0.3170 (0.6979)","_rn_":"15"},{"1":"year = -5 x cohort = 8","2":"-0.2382 (0.4697)","_rn_":"16"},{"1":"year = -5 x cohort = 9","2":"0.3015 (0.6042)","_rn_":"17"},{"1":"year = -5 x cohort = 10","2":"-0.5648 (0.4632)","_rn_":"18"},{"1":"year = -4 x cohort = 5","2":"-0.9835 (0.6345)","_rn_":"19"},{"1":"year = -4 x cohort = 6","2":"0.3604 (0.8583)","_rn_":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+</div>
+<div id="a.5.1-formula-macros-and-dot-square-brackets" class="section level4">
+<h4>A.5.1 Formula: macros and dot square brackets</h4>
 <pre class="r"><code>base = iris
 names(base) = c(&quot;y&quot;, &quot;x1&quot;, &quot;x2&quot;, &quot;x3&quot;, &quot;species&quot;)
 # Defining the macro variables
@@ -1053,19 +1099,20 @@ rbind(gamma, exp(fixef(result_NL_fe)$id[as.character(1:20)]))</code></pre>
 # 1 nthreads: 3.13s
 system.time(fenegbin(Euros ~ log(dist_km)|Origin+Destination+Product+Year, trade, nthreads = 1))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.837   0.008   0.846</code></pre>
+##   0.826   0.007   0.833</code></pre>
 <pre class="r"><code># 2 nthreads: 1.82s
 system.time(fenegbin(Euros ~ log(dist_km)|Origin+Destination+Product+Year, trade, nthreads = 2))</code></pre>
 <pre><code>## Warning: In fixest_env(fml = fml, data = data, family = famil...:
 ##  OpenMP not detected: cannot use 2 threads, single-threaded mode instead.</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.824   0.010   0.836</code></pre>
+##   0.815   0.006   0.821</code></pre>
 <pre class="r"><code># 4 nthreads: 1.17s
 system.time(fenegbin(Euros ~ log(dist_km)|Origin+Destination+Product+Year, trade, nthreads = 4))</code></pre>
 <pre><code>## Warning: In fixest_env(fml = fml, data = data, family = famil...:
 ##  OpenMP not detected: cannot use 4 threads, single-threaded mode instead.</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.810   0.006   0.816</code></pre>
+##   0.812   0.004   0.817</code></pre>
+</div>
 </div>
 </div>
 

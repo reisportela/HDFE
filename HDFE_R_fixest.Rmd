@@ -330,8 +330,7 @@ fixef(est_comb)[[1]]
 
 
 
-```{r A.4.1.2 Varying slopes (fe[x])
-}
+```{r A.4.1.2 Varying slopes (fe[x])}
 head(base)
 ```
 
@@ -345,9 +344,7 @@ est_vs
 summary(fixef(est_vs))
 ```
 
-```{r A.4.2 Interactions that don’t involve fixed-effects}
-
-```
+#### A.4.2 Interactions that don’t involve fixed-effects
 
 ```{r A.4.2.1 A compact syntax for factors and interactions: i()}
 data(airquality)
@@ -420,12 +417,7 @@ summary(res_sa20, agg = "att")
 head(etable(res_sa20, agg = FALSE), 20)
 ```
 
-
-
-```{r A.5.1 Formula: macros and dot square brackets}
-
-```
-
+#### A.5.1 Formula: macros and dot square brackets
 
 ```{r A.5.1.1 Formula macros}
 base = iris
@@ -546,7 +538,6 @@ base = data.frame(x, y, z)
 
 ```{r}
 result_NL = feNmlm(z~0, base, NL.fml = ~ log(a*x + b*y), NL.start = list(a=1, b=1), lower = list(a=0, b=0))
-
 ```
 
 ```{r}
