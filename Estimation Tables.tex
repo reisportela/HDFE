@@ -1,0 +1,61 @@
+
+\begin{table}[htbp]
+   \caption{First export -- normal Standard-errors}
+   \centering
+   \begin{tabular}{lcccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variable: & \multicolumn{4}{c}{Euros}\\
+      Model:              & (1)                     & (2)                   & (3)                   & (4)\\  
+      \midrule
+      \emph{Variables}\\
+      $\ln (Distance)$    & -1.029$^{a}$            & -1.029$^{a}$          & -1.226$^{a}$          & -1.518$^{a}$\\   
+                          & ($9.27\times 10^{-7}$)  & (0.0050)              & (0.0047)              & (0.0077)\\   
+      \midrule
+      \emph{Fixed-effects}\\
+      Year                &                         & Yes                   & Yes                   & Yes\\  
+      Destination         &                         &                       & Yes                   & Yes\\  
+      Origin              &                         &                       &                       & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations        & 38,325                  & 38,325                & 38,325                & 38,325\\  
+      Squared Correlation & 0.05511                 & 0.05711               & 0.16420               & 0.38479\\  
+      Pseudo R$^2$        & 0.18502                 & 0.18833               & 0.35826               & 0.59312\\  
+      BIC                 & $4.85\times 10^{12}$    & $4.83\times 10^{12}$  & $3.82\times 10^{12}$  & $2.42\times 10^{12}$\\   
+      \midrule \midrule
+      \multicolumn{5}{l}{\emph{Signif. Codes: a: 0.01, b: 0.05}}\\
+   \end{tabular}
+\end{table}
+
+
+
+\begin{table}[htbp]
+   \caption{Second export -- clustered standard-errors (on Product variable)}
+   \centering
+   \begin{tabular}{lcccc}
+      \tabularnewline \midrule \midrule
+      Dependent Variable: & \multicolumn{4}{c}{Euros}\\
+      Model:              & (1)                   & (2)                   & (3)                   & (4)\\  
+      \midrule
+      \emph{Variables}\\
+      $\ln (Distance)$    & -1.029$^{***}$        & -1.029$^{***}$        & -1.226$^{***}$        & -1.518$^{***}$\\   
+                          & (0.0459)              & (0.0460)              & (0.0785)              & (0.0974)\\   
+      Constant            & 24.71$^{***}$         &                       &                       &   \\   
+                          & (0.3300)              &                       &                       &   \\   
+      \midrule
+      \emph{Fixed-effects}\\
+      Year                &                       & Yes                   & Yes                   & Yes\\  
+      Destination         &                       &                       & Yes                   & Yes\\  
+      Origin              &                       &                       &                       & Yes\\  
+      \midrule
+      \emph{Fit statistics}\\
+      Observations        & 38,325                & 38,325                & 38,325                & 38,325\\  
+      Squared Correlation & 0.05511               & 0.05711               & 0.16420               & 0.38479\\  
+      Pseudo R$^2$        & 0.18502               & 0.18833               & 0.35826               & 0.59312\\  
+      BIC                 & $4.85\times 10^{12}$  & $4.83\times 10^{12}$  & $3.82\times 10^{12}$  & $2.42\times 10^{12}$\\   
+      \midrule \midrule
+      \multicolumn{5}{l}{\emph{Clustered (Product) standard-errors in parentheses}}\\
+      \multicolumn{5}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+   \end{tabular}
+\end{table}
+
+
