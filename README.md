@@ -10,7 +10,7 @@
 
 ### Julia Notebook
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?labpath=Julia_FixedEffectModels_JupyterNotebook_Benchmark.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?labpath=HDFE_Julia.ipynb)
 
 
 ### Notes
