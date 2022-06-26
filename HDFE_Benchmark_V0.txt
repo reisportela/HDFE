@@ -3970,3 +3970,4 @@ r; t=0.17 18:30:58
 end of do-file
 
 r; t=0.18 18:30:58
+. exit, clear
