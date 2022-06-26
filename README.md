@@ -35,6 +35,13 @@ LEED sample.
 <img src="the_Data_Benchmark.png" width="400">
 
 
+### The machine
+
+Dell server with 48 Cores & 512 GB RAM running Windows Server 2019.
+
+<img src="The_Machine.png" width="400">
+
+
 ### R: the state of the art
 
 The fastest solution with an awesome ecosystem.
