@@ -80,7 +80,9 @@ Not bad: 962.9 seconds (16.1 minutes).
 
 Too slow: 5098.11 seconds (84 minutes).
 
-![](Stata_performance.png)
+<img src="Stata_performance.png" width="600">
+
+<!--- ![](Stata_performance.png) -->
 
 ### Python: just a concept
 
