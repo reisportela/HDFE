@@ -45,7 +45,8 @@ The fastest solution with an awesome ecosystem.
 
 Not bad.
 
-![](Julia_performance_V2.png)
+<img src="Julia_performance_V2.png" width="600">
+
 
 ### Stata: not a match for R or Julia, as far as computation time is concerned
 
