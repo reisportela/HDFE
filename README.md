@@ -44,26 +44,26 @@ Dell server with 48 Cores & 512 GB RAM running Windows Server 2019.
 
 ### R: the state of the art
 
-The fastest solution with an awesome ecosystem.
+The fastest solution with an awesome ecosystem: 383.33 seconds (6.4 minutes).
 
 ![](R_performance.png)
 
 ### Julia: fast but lacks an adequate ecosystem
 
-Not bad.
+Not bad: 962.9 seconds (16.1 minutes)
 
 <img src="Julia_performance_V2.png" width="1300">
 
 
 ### Stata: not a match for R or Julia, as far as computation time is concerned
 
-Too slow.
+Too slow: 5098.11 seconds (84 minutes).
 
 ![](Stata_performance.png)
 
 ### Python: just a concept
 
-Forget it.
+Forget it: still running.
 
 ![](Python_performance.png)
 
