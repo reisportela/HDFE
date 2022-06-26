@@ -22,11 +22,31 @@ Launch MyBinder with RStudio
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/reisportela/HDFE/HEAD?labpath=HDFE_Julia.ipynb)
 
-## 6. Discuss SoS notebook: computation time using Python, R, Julia and Stata (PRJS)
+## 6. Discuss the SoS notebook: computation time using Python, R, Julia and Stata (PRJS)
 
 > Windows server: run the notebook `All_In_One_Python_R_Julia_Stata_FULL.ipynb`
 
 > Python is too slow: run in the sample using the notebook `HDFE_Python.ipynb` using VSCode
+
+### The data
+
+![LEED sample](the_Data_Benchmark.png)
+
+### R -- the state of the art
+
+![The fastest solution](R_performance.png)
+
+### Julia -- fast but lacks an adequate ecosystem
+
+![Not bad](Julia_performance.png)
+
+### Stata: not a match for R or Julia, as far as computation time is concerned
+
+![Too slow](Stata_performance.png)
+
+### Python -- just a concept
+
+![Forget it](Python_performance.png)
 
 
 <!--- 
