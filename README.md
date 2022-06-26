@@ -1,6 +1,6 @@
 # HDFE
 
-Show the repository on [GitHub](https://github.com/): [https://github.com/reisportela/HDFE](https://github.com/reisportela/HDFE)
+Show the repository on GitHub: [https://github.com/reisportela/HDFE](https://github.com/reisportela/HDFE)
 
 ## 1. Use [MyBinder](https://mybinder.org/) to run a container with R & RStudio + Julia
 
@@ -65,7 +65,7 @@ Too slow: 5098.11 seconds (84 minutes).
 
 Forget it: still running.
 
-![](Python_performance.png)
+![](Python_performance_V3.png)
 
 
 <!--- 
