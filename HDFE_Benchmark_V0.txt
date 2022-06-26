@@ -298,3 +298,3675 @@ r; t=0.08 14:12:10
 end of do-file
 
 r; t=0.08 14:12:10
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.03 17:43:39
+
+. xtset idcode year
+
+Panel variable: idcode (unbalanced)
+ Time variable: year, 70 to 88, but with gaps
+         Delta: 1 unit
+r; t=0.07 17:43:39
+
+. 
+.         timer on 1
+r; t=0.00 17:43:39
+
+. 
+end of do-file
+
+r; t=0.10 17:43:39
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.         xtreg ln_wage ttl_exp union not_smsa nev_mar, fe
+
+Fixed-effects (within) regression               Number of obs     =     19,151
+Group variable: idcode                          Number of groups  =      4,142
+
+R-squared:                                      Obs per group:
+     Within  = 0.1354                                         min =          1
+     Between = 0.3003                                         avg =        4.6
+     Overall = 0.2201                                         max =         12
+
+                                                F(4,15005)        =     587.66
+corr(u_i, Xb) = 0.2424                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0005831    42.42   0.000     .0235937    .0258798
+       union |   .1020091   .0069487    14.68   0.000     .0883887    .1156294
+    not_smsa |  -.1006281   .0124436    -8.09   0.000    -.1250191   -.0762371
+     nev_mar |  -.0051586   .0099787    -0.52   0.605    -.0247181    .0144009
+       _cons |   1.569448   .0069169   226.90   0.000      1.55589    1.583006
+-------------+----------------------------------------------------------------
+     sigma_u |  .38390408
+     sigma_e |  .25623905
+         rho |   .6918034   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(4141, 15005) = 8.30                 Prob > F = 0.0000
+r; t=0.09 17:43:53
+
+.                 est store FE
+r; t=0.00 17:43:53
+
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 1 HDFE group                            F(   4,  15005) =     587.66
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7529
+                                                  Adj R-squared   =     0.6957
+                                                  Within R-sq.    =     0.1354
+                                                  Root MSE        =     0.2562
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0005831    42.42   0.000     .0235937    .0258798
+       union |   .1020091   .0069487    14.68   0.000     .0883887    .1156294
+    not_smsa |  -.1006281   .0124436    -8.09   0.000    -.1250191   -.0762371
+     nev_mar |  -.0051586   .0099787    -0.52   0.605    -.0247181    .0144009
+       _cons |   1.572064   .0069678   225.62   0.000     1.558407    1.585722
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+-----------------------------------------------------+
+r; t=0.11 17:43:53
+
+.                 est store HDFE1
+r; t=0.00 17:43:53
+
+. 
+.                 esttab FE HDFE1, ///
+>                                 drop(_cons) ///
+>                                 mtitle("Model (1)" "Model (2)") nonumbers ///
+>                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA
+> " nev_mar "Never married") ///
+>                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+>                                 nonotes addnotes("Notes: standard errors in parenthesis." "Signi
+> ficance levels: *, 10\%; **, 5\%; ***, 1\%." "The dependent variable is log wage." "SMSA: standa
+> rd metropolitan statistical area." "Model (7) is estimated by bootstrap. Source: own computation
+> s.")
+
+--------------------------------------------
+                Model (1)       Model (2)   
+--------------------------------------------
+Experience         0.0247***       0.0247***
+                (0.00058)       (0.00058)   
+
+Union              0.1020***       0.1020***
+                (0.00695)       (0.00695)   
+
+Not SMSA          -0.1006***      -0.1006***
+                (0.01244)       (0.01244)   
+
+Never marr~d      -0.0052         -0.0052   
+                (0.00998)       (0.00998)   
+--------------------------------------------
+N                   19151           18486   
+R$^2$                0.14            0.75   
+RSS                985.21          985.21   
+--------------------------------------------
+Notes: standard errors in parenthesis.
+Significance levels: *, 10\%; **, 5\%; ***, 1\%.
+The dependent variable is log wage.
+SMSA: standard metropolitan statistical area.
+Model (7) is estimated by bootstrap. Source: own computations.
+r; t=0.07 17:43:53
+
+. 
+end of do-file
+
+r; t=0.27 17:43:53
+. di 19151-665
+18486
+r; t=0.00 17:44:26
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.         xtreg ln_wage ttl_exp union not_smsa nev_mar i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =     19,151
+Group variable: idcode                          Number of groups  =      4,142
+
+R-squared:                                      Obs per group:
+     Within  = 0.1471                                         min =          1
+     Between = 0.2976                                         avg =        4.6
+     Overall = 0.2290                                         max =         12
+
+                                                F(15,14994)       =     172.38
+corr(u_i, Xb) = 0.1566                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+             |
+        year |
+         71  |   .0023786   .0134468     0.18   0.860    -.0239788     .028736
+         72  |  -.0214939   .0129917    -1.65   0.098    -.0469592    .0039715
+         73  |  -.0437612   .0136909    -3.20   0.001    -.0705971   -.0169253
+         77  |  -.0830196   .0137725    -6.03   0.000    -.1100153   -.0560239
+         78  |  -.0652405    .014978    -4.36   0.000    -.0945992   -.0358818
+         80  |  -.1426193   .0159288    -8.95   0.000    -.1738417   -.1113969
+         82  |  -.1811386   .0173029   -10.47   0.000    -.2150544   -.1472227
+         83  |  -.1838406   .0184173    -9.98   0.000    -.2199408   -.1477405
+         85  |   -.207773   .0201469   -10.31   0.000    -.2472633   -.1682826
+         87  |  -.2479888   .0221707   -11.19   0.000    -.2914461   -.2045315
+         88  |   -.260035   .0239878   -10.84   0.000     -.307054   -.2130159
+             |
+       _cons |   1.567281   .0120841   129.70   0.000     1.543594    1.590967
+-------------+----------------------------------------------------------------
+     sigma_u |  .37206938
+     sigma_e |  .25460098
+         rho |  .68108568   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(4141, 14994) = 8.18                 Prob > F = 0.0000
+r; t=0.26 17:48:37
+
+.                 est store FE
+r; t=0.00 17:48:37
+
+. 
+end of do-file
+
+r; t=0.27 17:48:37
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.         xtreg ln_wage ttl_exp union not_smsa nev_mar i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =     19,151
+Group variable: idcode                          Number of groups  =      4,142
+
+R-squared:                                      Obs per group:
+     Within  = 0.1471                                         min =          1
+     Between = 0.2976                                         avg =        4.6
+     Overall = 0.2290                                         max =         12
+
+                                                F(15,14994)       =     172.38
+corr(u_i, Xb) = 0.1566                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+             |
+        year |
+         71  |   .0023786   .0134468     0.18   0.860    -.0239788     .028736
+         72  |  -.0214939   .0129917    -1.65   0.098    -.0469592    .0039715
+         73  |  -.0437612   .0136909    -3.20   0.001    -.0705971   -.0169253
+         77  |  -.0830196   .0137725    -6.03   0.000    -.1100153   -.0560239
+         78  |  -.0652405    .014978    -4.36   0.000    -.0945992   -.0358818
+         80  |  -.1426193   .0159288    -8.95   0.000    -.1738417   -.1113969
+         82  |  -.1811386   .0173029   -10.47   0.000    -.2150544   -.1472227
+         83  |  -.1838406   .0184173    -9.98   0.000    -.2199408   -.1477405
+         85  |   -.207773   .0201469   -10.31   0.000    -.2472633   -.1682826
+         87  |  -.2479888   .0221707   -11.19   0.000    -.2914461   -.2045315
+         88  |   -.260035   .0239878   -10.84   0.000     -.307054   -.2130159
+             |
+       _cons |   1.567281   .0120841   129.70   0.000     1.543594    1.590967
+-------------+----------------------------------------------------------------
+     sigma_u |  .37206938
+     sigma_e |  .25460098
+         rho |  .68108568   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(4141, 14994) = 8.18                 Prob > F = 0.0000
+r; t=0.14 17:48:59
+
+.                 est store FE2
+r; t=0.00 17:48:59
+
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.15 17:49:00
+
+.                 est store HDFE2
+r; t=0.00 17:49:00
+
+. 
+.                 esttab FE2 HDFE2, ///
+>                                 drop(_cons) ///
+>                                 mtitle("Model (1)" "Model (2)") nonumbers ///
+>                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA
+> " nev_mar "Never married") ///
+>                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+>                                 nonotes addnotes("Notes: standard errors in parenthesis." "Signi
+> ficance levels: *, 10\%; **, 5\%; ***, 1\%." "The dependent variable is log wage." "SMSA: standa
+> rd metropolitan statistical area." "Model (7) is estimated by bootstrap. Source: own computation
+> s.")
+
+--------------------------------------------
+                Model (1)       Model (2)   
+--------------------------------------------
+Experience         0.0437***       0.0437***
+                (0.00160)       (0.00160)   
+
+Union              0.1012***       0.1012***
+                (0.00693)       (0.00693)   
+
+Not SMSA          -0.0940***      -0.0940***
+                (0.01238)       (0.01238)   
+
+Never marr~d      -0.0213**       -0.0213** 
+                (0.01023)       (0.01023)   
+
+70.year            0.0000                   
+                      (.)                   
+
+71.year            0.0024                   
+                (0.01345)                   
+
+72.year           -0.0215*                  
+                (0.01299)                   
+
+73.year           -0.0438***                
+                (0.01369)                   
+
+77.year           -0.0830***                
+                (0.01377)                   
+
+78.year           -0.0652***                
+                (0.01498)                   
+
+80.year           -0.1426***                
+                (0.01593)                   
+
+82.year           -0.1811***                
+                (0.01730)                   
+
+83.year           -0.1838***                
+                (0.01842)                   
+
+85.year           -0.2078***                
+                (0.02015)                   
+
+87.year           -0.2480***                
+                (0.02217)                   
+
+88.year           -0.2600***                
+                (0.02399)                   
+--------------------------------------------
+N                   19151           18486   
+R$^2$                0.15            0.76   
+RSS                971.94          971.94   
+--------------------------------------------
+Notes: standard errors in parenthesis.
+Significance levels: *, 10\%; **, 5\%; ***, 1\%.
+The dependent variable is log wage.
+SMSA: standard metropolitan statistical area.
+Model (7) is estimated by bootstrap. Source: own computations.
+r; t=0.08 17:49:00
+
+. 
+end of do-file
+
+r; t=0.38 17:49:00
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.                 esttab FE2 HDFE2, ///
+>                                 drop(_cons i*.year) ///
+>                                 mtitle("Model (1)" "Model (2)") nonumbers ///
+>                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA
+> " nev_mar "Never married") ///
+>                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+>                                 nonotes addnotes("Notes: standard errors in parenthesis." "Signi
+> ficance levels: *, 10\%; **, 5\%; ***, 1\%." "The dependent variable is log wage." "SMSA: standa
+> rd metropolitan statistical area." "Model (7) is estimated by bootstrap. Source: own computation
+> s.")
+coefficient i*.year not found
+r(111); t=0.02 17:50:58
+
+end of do-file
+
+r(111); t=0.02 17:50:58
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.                 esttab FE2 HDFE2, ///
+>                                 keep(ttl_exp union not_smsa nev_mar) ///
+>                                 mtitle("Model (1)" "Model (2)") nonumbers ///
+>                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA
+> " nev_mar "Never married") ///
+>                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+>                                 nonotes addnotes("Notes: standard errors in parenthesis." "Signi
+> ficance levels: *, 10\%; **, 5\%; ***, 1\%." "The dependent variable is log wage." "SMSA: standa
+> rd metropolitan statistical area." "Model (7) is estimated by bootstrap. Source: own computation
+> s.")
+
+--------------------------------------------
+                Model (1)       Model (2)   
+--------------------------------------------
+Experience         0.0437***       0.0437***
+                (0.00160)       (0.00160)   
+
+Union              0.1012***       0.1012***
+                (0.00693)       (0.00693)   
+
+Not SMSA          -0.0940***      -0.0940***
+                (0.01238)       (0.01238)   
+
+Never marr~d      -0.0213**       -0.0213** 
+                (0.01023)       (0.01023)   
+--------------------------------------------
+N                   19151           18486   
+R$^2$                0.15            0.76   
+RSS                971.94          971.94   
+--------------------------------------------
+Notes: standard errors in parenthesis.
+Significance levels: *, 10\%; **, 5\%; ***, 1\%.
+The dependent variable is log wage.
+SMSA: standard metropolitan statistical area.
+Model (7) is estimated by bootstrap. Source: own computations.
+r; t=0.07 17:51:16
+
+. 
+end of do-file
+
+r; t=0.07 17:51:16
+. reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.18 17:52:30
+
+. reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) robust
+(dropped 665 singleton observations)
+options robust not allowed
+r(198); t=0.03 17:52:45
+
+. reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(robust)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     211.72
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+             |               Robust
+     ln_wage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0017803    24.53   0.000       .04018    .0471592
+       union |    .101249   .0080259    12.62   0.000     .0855172    .1169808
+    not_smsa |  -.0940314   .0147935    -6.36   0.000    -.1230284   -.0650344
+     nev_mar |  -.0212838   .0110131    -1.93   0.053    -.0428709    .0003032
+       _cons |   1.425209   .0151166    94.28   0.000     1.395579     1.45484
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.16 17:52:55
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.03 17:57:37
+
+. 
+end of do-file
+
+r; t=0.03 17:57:37
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:01:09
+
+. 
+.         local vars = "idcode year"
+r; t=0.00 18:01:09
+
+.         
+.         foreach r of numlist 1/5
+{ required
+r(100); t=0.00 18:01:09
+
+end of do-file
+
+r(100); t=0.01 18:01:09
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:01:24
+
+. 
+.         local vars = "idcode year"
+r; t=0.00 18:01:24
+
+.         
+.         foreach r of numlist 1/5 {
+  2.         foreach vv of local vars {
+  3.                 bys : gen nn = _N
+  4.                         keep drop if nn == 1
+  5.                                 drop nn
+  6.         }
+  7.         }
+varlist required
+r(100); t=0.00 18:01:24
+
+end of do-file
+
+r(100); t=0.00 18:01:24
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:01:46
+
+. 
+.         local vars = "idcode year"
+r; t=0.00 18:01:46
+
+.         
+.         foreach r of numlist 1/5 {
+  2.         foreach vv of local vars {
+  3.                 bys `vv': gen nn = _N
+  4.                         keep drop if nn == 1
+  5.                                 drop nn
+  6.         }
+  7.         }
+variable drop not found
+r(111); t=0.00 18:01:46
+
+end of do-file
+
+r(111); t=0.00 18:01:46
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:02:15
+
+. count
+  19,151
+r; t=0.00 18:02:15
+
+.         local vars = "idcode year"
+r; t=0.00 18:02:15
+
+.         
+.         foreach r of numlist 1/5 {
+  2.         foreach vv of local vars {
+  3.                 bys `vv': gen nn = _N
+  4.                         drop if nn == 1
+  5.                                 drop nn
+  6.         }
+  7.         }
+(665 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+r; t=0.06 18:02:15
+
+. 
+. count
+  18,486
+r; t=0.00 18:02:15
+
+. 
+end of do-file
+
+r; t=0.07 18:02:15
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:02:34
+
+. count
+  19,151
+r; t=0.00 18:02:34
+
+. 
+end of do-file
+
+r; t=0.01 18:02:34
+. des
+
+Contains data from nlswork_regression.dta
+ Observations:        19,151                  National Longitudinal Survey of Young Women, 14-24
+                                                years old in 1968
+    Variables:             9                  26 Jun 2022 12:31
+                                              (_dta has notes)
+--------------------------------------------------------------------------------------------------
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+--------------------------------------------------------------------------------------------------
+idcode          int     %8.0g                 NLS ID
+year            byte    %8.0g                 Interview year
+nev_mar         byte    %8.0g                 1 if never married
+not_smsa        byte    %8.0g                 1 if not SMSA
+south           byte    %8.0g                 1 if south
+occ_code        byte    %8.0g                 Occupation
+union           byte    %8.0g                 1 if union
+ttl_exp         float   %9.0g                 Total work experience
+ln_wage         float   %9.0g                 ln(wage/GNP deflator)
+--------------------------------------------------------------------------------------------------
+Sorted by: idcode  year
+r; t=0.02 18:02:46
+
+. tab year
+
+  Interview |
+       year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+         70 |        797        4.16        4.16
+         71 |        927        4.84        9.00
+         72 |      1,240        6.47       15.48
+         73 |      1,053        5.50       20.98
+         77 |      2,153       11.24       32.22
+         78 |      1,328        6.93       39.15
+         80 |      1,679        8.77       47.92
+         82 |      2,075       10.83       58.75
+         83 |      1,799        9.39       68.15
+         85 |      2,075       10.83       78.98
+         87 |      2,146       11.21       90.19
+         88 |      1,879        9.81      100.00
+------------+-----------------------------------
+      Total |     19,151      100.00
+r; t=0.01 18:02:50
+
+. drop if year 70
+invalid '70' 
+r(198); t=0.00 18:03:01
+
+. ret li
+
+scalars:
+                  r(N) =  19151
+                  r(r) =  12
+r; t=0.00 18:03:02
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:04:09
+
+. count
+  19,151
+r; t=0.00 18:04:09
+
+. 
+.         local vars = "idcode year"
+r; t=0.00 18:04:09
+
+.         
+.         local eliminated = 999
+r; t=0.00 18:04:09
+
+.         
+.         while `eliminated' > 0 {
+  2.         foreach vv of local vars {
+  3.                 bys `vv': gen nn = _N
+  4.                         drop if nn == 1
+  5.                                 drop nn
+  6.                                 local eliminated = r(r)
+  7.         }
+  8.         }
+(665 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+--Break--
+r(1); t=4.56 18:04:13
+
+end of do-file
+
+--Break--
+r(1); t=4.56 18:04:13
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:04:47
+
+. count
+  19,151
+r; t=0.00 18:04:47
+
+. 
+.         local vars = "idcode year"
+r; t=0.00 18:04:47
+
+.         
+.         local eliminated = 999
+r; t=0.00 18:04:47
+
+.         
+.         while `eliminated' == 0 {
+  2.         foreach vv of local vars {
+  3.                 bys `vv': gen nn = _N
+  4.                         drop if nn == 1
+  5.                                 drop nn
+  6.                                 local eliminated = r(r)
+  7.         }
+  8.         }
+r; t=0.00 18:04:47
+
+. 
+. count
+  19,151
+r; t=0.00 18:04:47
+
+. 
+end of do-file
+
+r; t=0.00 18:04:47
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:05:13
+
+. count
+  19,151
+r; t=0.00 18:05:13
+
+. 
+.         local vars = "idcode year"
+r; t=0.00 18:05:13
+
+.         
+.         local eliminated = 1
+r; t=0.00 18:05:13
+
+.         
+.         while `eliminated' == 1 {
+  2.         foreach vv of local vars {
+  3.                 bys `vv': gen nn = _N
+  4.                         drop if nn == 1
+  5.                                 drop nn
+  6.                                 local eliminated = r(r)
+  7.         }
+  8.         }
+(665 observations deleted)
+(0 observations deleted)
+r; t=0.01 18:05:13
+
+. 
+. count
+  18,486
+r; t=0.00 18:05:13
+
+. 
+end of do-file
+
+r; t=0.02 18:05:13
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:05:53
+
+. count
+  19,151
+r; t=0.00 18:05:53
+
+. 
+.         local vars = "idcode year"
+r; t=0.00 18:05:53
+
+.         
+.         local eliminated = 1
+r; t=0.00 18:05:53
+
+.         
+.         while `eliminated' != 0 {
+  2.         foreach vv of local vars {
+  3.                 bys `vv': gen nn = _N
+  4.                         drop if nn == 1
+  5.                                 local eliminated = r(r)
+  6.                                 drop nn
+  7.         }
+  8.         }
+(665 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+--Break--
+r(1); t=1.71 18:05:54
+
+end of do-file
+
+--Break--
+r(1); t=1.71 18:05:54
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:07:35
+
+. count
+  19,151
+r; t=0.00 18:07:35
+
+. 
+.         local vars = "idcode year"
+r; t=0.00 18:07:35
+
+.         
+.         foreach r of numlist 1/5 {
+  2.         foreach vv of local vars {
+  3.                 bys `vv': gen nn = _N
+  4.                         drop if nn == 1
+  5.                                 drop nn
+  6.         }
+  7.         }
+(665 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+r; t=0.06 18:07:35
+
+. 
+. count
+  18,486
+r; t=0.00 18:07:35
+
+. 
+end of do-file
+
+r; t=0.06 18:07:35
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:08:10
+
+. xtset idcode year
+
+Panel variable: idcode (unbalanced)
+ Time variable: year, 70 to 88, but with gaps
+         Delta: 1 unit
+r; t=0.02 18:08:10
+
+. 
+end of do-file
+
+r; t=0.02 18:08:10
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode) vce(cluster south)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 1 iterations)
+warning: missing F statistic; dropped variables due to collinearity or too few clusters
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 1 HDFE group                            F(   4,      1) =          .
+Statistics robust to heteroskedasticity           Prob > F        =          .
+                                                  R-squared       =     0.7529
+                                                  Adj R-squared   =     0.6957
+                                                  Within R-sq.    =     0.1354
+Number of clusters (south)   =          2         Root MSE        =     0.2562
+
+                                  (Std. err. adjusted for 2 clusters in south)
+------------------------------------------------------------------------------
+             |               Robust
+     ln_wage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0007412    33.38   0.019     .0153195    .0341541
+       union |   .1020091   .0043837    23.27   0.027     .0463083    .1577099
+    not_smsa |  -.1006281   .0358624    -2.81   0.218    -.5563032     .355047
+     nev_mar |  -.0051586   .0160181    -0.32   0.802    -.2086881    .1983708
+       _cons |   1.572064   .0032364   485.74   0.001     1.530942    1.613187
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+-----------------------------------------------------+
+r; t=0.11 18:08:16
+
+.                 est store HDFE1cluster
+r; t=0.00 18:08:16
+
+. 
+end of do-file
+
+r; t=0.11 18:08:16
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.01 18:08:46
+
+. count
+  19,151
+r; t=0.00 18:08:46
+
+. 
+.         local vars = "idcode year"
+r; t=0.00 18:08:46
+
+.         
+.         foreach r of numlist 1/5 {
+  2.         foreach vv of local vars {
+  3.                 bys `vv': gen nn = _N
+  4.                         drop if nn == 1
+  5.                                 drop nn
+  6.         }
+  7.         }
+(665 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+(0 observations deleted)
+r; t=0.03 18:08:47
+
+. 
+. count
+  18,486
+r; t=0.00 18:08:47
+
+. compress
+  (0 bytes saved)
+r; t=0.00 18:08:47
+
+. sort idcode year
+r; t=0.00 18:08:47
+
+. xtset idcode year
+
+Panel variable: idcode (unbalanced)
+ Time variable: year, 70 to 88, but with gaps
+         Delta: 1 unit
+r; t=0.02 18:08:47
+
+. save nlswork_regression_nosingleton, replace
+(file nlswork_regression_nosingleton.dta not found)
+file nlswork_regression_nosingleton.dta saved
+r; t=0.03 18:08:47
+
+. 
+end of do-file
+
+r; t=0.09 18:08:47
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression_nosingleton, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 18:09:03
+
+. xtset idcode year
+
+Panel variable: idcode (unbalanced)
+ Time variable: year, 70 to 88, but with gaps
+         Delta: 1 unit
+r; t=0.02 18:09:03
+
+. 
+.         timer on 1
+r; t=0.00 18:09:03
+
+.         
+. **# 1. Simple case - one fixed effect
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode)
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 1 HDFE group                            F(   4,  15005) =     587.66
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7529
+                                                  Adj R-squared   =     0.6957
+                                                  Within R-sq.    =     0.1354
+                                                  Root MSE        =     0.2562
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0005831    42.42   0.000     .0235937    .0258798
+       union |   .1020091   .0069487    14.68   0.000     .0883887    .1156294
+    not_smsa |  -.1006281   .0124436    -8.09   0.000    -.1250191   -.0762371
+     nev_mar |  -.0051586   .0099787    -0.52   0.605    -.0247181    .0144009
+       _cons |   1.572064   .0069678   225.62   0.000     1.558407    1.585722
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+-----------------------------------------------------+
+r; t=0.06 18:09:03
+
+.                 est store HDFE1
+r; t=0.00 18:09:03
+
+. 
+. **# 2. As above, but also compute clustered standard errors
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode) vce(cluster south)
+(MWFE estimator converged in 1 iterations)
+warning: missing F statistic; dropped variables due to collinearity or too few clusters
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 1 HDFE group                            F(   4,      1) =          .
+Statistics robust to heteroskedasticity           Prob > F        =          .
+                                                  R-squared       =     0.7529
+                                                  Adj R-squared   =     0.6957
+                                                  Within R-sq.    =     0.1354
+Number of clusters (south)   =          2         Root MSE        =     0.2562
+
+                                  (Std. err. adjusted for 2 clusters in south)
+------------------------------------------------------------------------------
+             |               Robust
+     ln_wage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0007412    33.38   0.019     .0153195    .0341541
+       union |   .1020091   .0043837    23.27   0.027     .0463083    .1577099
+    not_smsa |  -.1006281   .0358624    -2.81   0.218    -.5563032     .355047
+     nev_mar |  -.0051586   .0160181    -0.32   0.802    -.2086881    .1983708
+       _cons |   1.572064   .0032364   485.74   0.001     1.530942    1.613187
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+-----------------------------------------------------+
+r; t=0.06 18:09:03
+
+.                 est store HDFE1cluster
+r; t=0.00 18:09:03
+
+. 
+end of do-file
+
+r; t=0.14 18:09:03
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.18 18:10:59
+
+.                 est store HDFE2
+r; t=0.00 18:10:59
+
+. 
+end of do-file
+
+r; t=0.21 18:10:59
+. reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(robust)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     211.72
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+             |               Robust
+     ln_wage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0017803    24.53   0.000       .04018    .0471592
+       union |    .101249   .0080259    12.62   0.000     .0855172    .1169808
+    not_smsa |  -.0940314   .0147935    -6.36   0.000    -.1230284   -.0650344
+     nev_mar |  -.0212838   .0110131    -1.93   0.053    -.0428709    .0003032
+       _cons |   1.425209   .0151166    94.28   0.000     1.395579     1.45484
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.19 18:11:45
+
+. reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(cluster idcode )
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,   3476) =     124.80
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+Number of clusters (idcode)  =      3,477         Root MSE        =     0.2546
+
+                             (Std. err. adjusted for 3,477 clusters in idcode)
+------------------------------------------------------------------------------
+             |               Robust
+     ln_wage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0023389    18.67   0.000     .0390839    .0482553
+       union |    .101249   .0094676    10.69   0.000     .0826863    .1198117
+    not_smsa |  -.0940314   .0187634    -5.01   0.000    -.1308198    -.057243
+     nev_mar |  -.0212838   .0137563    -1.55   0.122    -.0482552    .0056875
+       _cons |   1.425209   .0196226    72.63   0.000     1.386736    1.463682
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477        3477           0    *|
+        year |        12           1          11     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.11 18:11:55
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.17 18:14:48
+
+. 
+end of do-file
+
+r; t=0.18 18:14:48
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.01 18:17:56
+
+. xtset idcode year
+
+Panel variable: idcode (unbalanced)
+ Time variable: year, 70 to 88, but with gaps
+         Delta: 1 unit
+r; t=0.02 18:17:56
+
+. 
+.         timer on 1
+r; t=0.00 18:17:56
+
+.         
+. **# 1. Simple case - one fixed effect
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 1 HDFE group                            F(   4,  15005) =     587.66
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7529
+                                                  Adj R-squared   =     0.6957
+                                                  Within R-sq.    =     0.1354
+                                                  Root MSE        =     0.2562
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0005831    42.42   0.000     .0235937    .0258798
+       union |   .1020091   .0069487    14.68   0.000     .0883887    .1156294
+    not_smsa |  -.1006281   .0124436    -8.09   0.000    -.1250191   -.0762371
+     nev_mar |  -.0051586   .0099787    -0.52   0.605    -.0247181    .0144009
+       _cons |   1.572064   .0069678   225.62   0.000     1.558407    1.585722
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+-----------------------------------------------------+
+r; t=0.06 18:17:56
+
+.                 est store HDFE1
+r; t=0.00 18:17:56
+
+. 
+. **# 2. As above, but also compute clustered standard errors
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode) vce(cluster south)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 1 iterations)
+warning: missing F statistic; dropped variables due to collinearity or too few clusters
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 1 HDFE group                            F(   4,      1) =          .
+Statistics robust to heteroskedasticity           Prob > F        =          .
+                                                  R-squared       =     0.7529
+                                                  Adj R-squared   =     0.6957
+                                                  Within R-sq.    =     0.1354
+Number of clusters (south)   =          2         Root MSE        =     0.2562
+
+                                  (Std. err. adjusted for 2 clusters in south)
+------------------------------------------------------------------------------
+             |               Robust
+     ln_wage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0007412    33.38   0.019     .0153195    .0341541
+       union |   .1020091   .0043837    23.27   0.027     .0463083    .1577099
+    not_smsa |  -.1006281   .0358624    -2.81   0.218    -.5563032     .355047
+     nev_mar |  -.0051586   .0160181    -0.32   0.802    -.2086881    .1983708
+       _cons |   1.572064   .0032364   485.74   0.001     1.530942    1.613187
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+-----------------------------------------------------+
+r; t=0.06 18:17:56
+
+.                 est store HDFE1cluster
+r; t=0.00 18:17:56
+
+. 
+. 
+. **# 3. Two sets of fixed effects
+. 
+.         xtreg ln_wage ttl_exp union not_smsa nev_mar i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =     19,151
+Group variable: idcode                          Number of groups  =      4,142
+
+R-squared:                                      Obs per group:
+     Within  = 0.1471                                         min =          1
+     Between = 0.2976                                         avg =        4.6
+     Overall = 0.2290                                         max =         12
+
+                                                F(15,14994)       =     172.38
+corr(u_i, Xb) = 0.1566                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+             |
+        year |
+         71  |   .0023786   .0134468     0.18   0.860    -.0239788     .028736
+         72  |  -.0214939   .0129917    -1.65   0.098    -.0469592    .0039715
+         73  |  -.0437612   .0136909    -3.20   0.001    -.0705971   -.0169253
+         77  |  -.0830196   .0137725    -6.03   0.000    -.1100153   -.0560239
+         78  |  -.0652405    .014978    -4.36   0.000    -.0945992   -.0358818
+         80  |  -.1426193   .0159288    -8.95   0.000    -.1738417   -.1113969
+         82  |  -.1811386   .0173029   -10.47   0.000    -.2150544   -.1472227
+         83  |  -.1838406   .0184173    -9.98   0.000    -.2199408   -.1477405
+         85  |   -.207773   .0201469   -10.31   0.000    -.2472633   -.1682826
+         87  |  -.2479888   .0221707   -11.19   0.000    -.2914461   -.2045315
+         88  |   -.260035   .0239878   -10.84   0.000     -.307054   -.2130159
+             |
+       _cons |   1.567281   .0120841   129.70   0.000     1.543594    1.590967
+-------------+----------------------------------------------------------------
+     sigma_u |  .37206938
+     sigma_e |  .25460098
+         rho |  .68108568   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(4141, 14994) = 8.18                 Prob > F = 0.0000
+r; t=0.11 18:17:56
+
+.                 est store FE2
+r; t=0.00 18:17:56
+
+. 
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.15 18:17:56
+
+.                 est store HDFE2
+r; t=0.00 18:17:56
+
+. 
+.                 esttab FE2 HDFE2, ///
+>                                 keep(ttl_exp union not_smsa nev_mar) ///
+>                                 mtitle("Model (1)" "Model (2)") nonumbers ///
+>                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA
+> " nev_mar "Never married") ///
+>                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+>                                 nonotes addnotes("Notes: standard errors in parenthesis." "Signi
+> ficance levels: *, 10\%; **, 5\%; ***, 1\%." "The dependent variable is log wage." "SMSA: standa
+> rd metropolitan statistical area." "Model (7) is estimated by bootstrap. Source: own computation
+> s.")
+
+--------------------------------------------
+                Model (1)       Model (2)   
+--------------------------------------------
+Experience         0.0437***       0.0437***
+                (0.00160)       (0.00160)   
+
+Union              0.1012***       0.1012***
+                (0.00693)       (0.00693)   
+
+Not SMSA          -0.0940***      -0.0940***
+                (0.01238)       (0.01238)   
+
+Never marr~d      -0.0213**       -0.0213** 
+                (0.01023)       (0.01023)   
+--------------------------------------------
+N                   19151           18486   
+R$^2$                0.15            0.76   
+RSS                971.94          971.94   
+--------------------------------------------
+Notes: standard errors in parenthesis.
+Significance levels: *, 10\%; **, 5\%; ***, 1\%.
+The dependent variable is log wage.
+SMSA: standard metropolitan statistical area.
+Model (7) is estimated by bootstrap. Source: own computations.
+r; t=0.07 18:17:56
+
+. 
+end of do-file
+
+r; t=0.48 18:17:56
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(cluster)
+Can't specify cluster without clustervars (and viceversa)
+r(9); t=0.01 18:22:32
+
+end of do-file
+
+r(9); t=0.02 18:22:32
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(cluster idcode year)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+Warning: VCV matrix was non-positive semi-definite; adjustment from Cameron, Gelbach & Miller appl
+> ied.
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,     11) =     106.27
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+Number of clusters (idcode)  =      3,477         Within R-sq.    =     0.0663
+Number of clusters (year)    =         12         Root MSE        =     0.2546
+
+                           (Std. err. adjusted for 12 clusters in idcode year)
+------------------------------------------------------------------------------
+             |               Robust
+     ln_wage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0028557    15.29   0.000     .0373842     .049955
+       union |    .101249   .0140184     7.22   0.000     .0703947    .1321033
+    not_smsa |  -.0940314   .0157647    -5.96   0.000    -.1287293   -.0593335
+     nev_mar |  -.0212838    .014301    -1.49   0.165    -.0527601    .0101924
+       _cons |   1.425209   .0236405    60.29   0.000     1.373177    1.477242
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477        3477           0    *|
+        year |        12          12           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.21 18:22:46
+
+. 
+end of do-file
+
+r; t=0.21 18:22:46
+. do "C:\tmp\STD40a8_000000.tmp"
+
+. reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(cluster idcode)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,   3476) =     124.80
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+Number of clusters (idcode)  =      3,477         Root MSE        =     0.2546
+
+                             (Std. err. adjusted for 3,477 clusters in idcode)
+------------------------------------------------------------------------------
+             |               Robust
+     ln_wage | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0023389    18.67   0.000     .0390839    .0482553
+       union |    .101249   .0094676    10.69   0.000     .0826863    .1198117
+    not_smsa |  -.0940314   .0187634    -5.01   0.000    -.1308198    -.057243
+     nev_mar |  -.0212838   .0137563    -1.55   0.122    -.0482552    .0056875
+       _cons |   1.425209   .0196226    72.63   0.000     1.386736    1.463682
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477        3477           0    *|
+        year |        12           1          11     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.12 18:22:55
+
+. 
+end of do-file
+
+r; t=0.12 18:22:55
+. reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.17 18:25:29
+
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.17 18:30:58
+
+. 
+end of do-file
+
+r; t=0.18 18:30:58

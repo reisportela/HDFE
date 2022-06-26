@@ -63,28 +63,39 @@ use nlswork, clear
 	sort idcode year
 	xtset idcode year
 	save nlswork_regression, replace
+	
+use nlswork_regression, clear
+count
+
+	local vars = "idcode year"
+	
+	foreach r of numlist 1/5 {
+	foreach vv of local vars {
+		bys `vv': gen nn = _N
+			drop if nn == 1
+				drop nn
+	}
+	}
+
+count
+compress
+sort idcode year
+xtset idcode year
+save nlswork_regression_nosingleton, replace
+
 */
 
 // -- START -- //
 
 use nlswork_regression, clear
+xtset idcode year
 
 	timer on 1
 	
 **# 1. Simple case - one fixed effect
 
-	xtreg ln_wage ttl_exp union not_smsa nev_mar, fe
-		est store FE
 	reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode)
 		est store HDFE1
-
-		esttab FE HDFE1, ///
-				drop(_cons) ///
-				mtitle("Model (1)" "Model (2)") nonumbers ///
-				coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA" nev_mar "Never married") ///
-				b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
-				scalars("N Observations" "r2 R$^2$" "rss RSS") ///
-				nonotes addnotes("Notes: standard errors in parenthesis." "Significance levels: *, 10\%; **, 5\%; ***, 1\%." "The dependent variable is log wage." "SMSA: standard metropolitan statistical area." "Model (7) is estimated by bootstrap. Source: own computations.")
 
 **# 2. As above, but also compute clustered standard errors
 
@@ -92,12 +103,27 @@ use nlswork_regression, clear
 		est store HDFE1cluster
 
 
-**# 3. Two and three sets of fixed effects
+**# 3. Two sets of fixed effects
+
+	xtreg ln_wage ttl_exp union not_smsa nev_mar i.year, fe
+		est store FE2
 
 	reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
 		est store HDFE2
 
-	reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year occ_code)
+		esttab FE2 HDFE2, ///
+				keep(ttl_exp union not_smsa nev_mar) ///
+				mtitle("Model (1)" "Model (2)") nonumbers ///
+				coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA" nev_mar "Never married") ///
+				b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+				scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+				nonotes addnotes("Notes: standard errors in parenthesis." "Significance levels: *, 10\%; **, 5\%; ***, 1\%." "The dependent variable is log wage." "SMSA: standard metropolitan statistical area." "Model (7) is estimated by bootstrap. Source: own computations.")
+
+reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(cluster idcode)
+
+	// ... and three fixed effects
+				
+				reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year occ_code)
 		est store HDFE3
 
 

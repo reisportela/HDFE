@@ -31,6 +31,7 @@ library(fixest)
 ```{r A.0 Data}
 data(trade)
 nls <- read_dta("nlswork_regression.dta")
+nls_nos <- read_dta("nlswork_regression_nosingleton.dta")
 ```
 
 ```{r A.1.1 Estimation}
@@ -62,16 +63,29 @@ gravity_ols = feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product +
 
 ### Wages
 
-```{r}
+```{r Wages PLM}
 wages_plm <- plm(ln_wage ~ ttl_exp + union + not_smsa + nev_mar, model="within",nls, index=c("idcode","year"))
 summary(wages_plm)
 ```
 
+```{r Wages FEOLS - VCOV cluster}
+# Stata: reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(cluster idcode)
+wages_feols <- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode + year,nls,fixef.tol = 1e-6,fixef.iter = 200,fixef.rm = "singleton")
+summary(wages_feols)
+# print(wages_feols)
+```
+
+```{r Wages FEOLS}
+# reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+wages_feols <- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode + year,nls,fixef.tol = 1e-6,fixef.iter = 200,fixef.rm = "singleton", vcov = "iid")
+summary(wages_feols)
+# print(wages_feols)
+```
 
 ```{r}
-wages_feols <- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode + year,nls)
-summary(wages_feols)
+summary(wages_feols, vcov = "twoway")
 ```
+
 
 ```{r A.1.4.2 Other estimation functions}
 gravity_negbin = fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
