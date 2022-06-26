@@ -15,3 +15,8 @@ dependencies:
   - r-glmmML
   - r-plm
   - r-fixest
+  - here
+  - tictoc
+  - markdown
+  - rmarkdown
+  - tinytex

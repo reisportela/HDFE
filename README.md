@@ -2,7 +2,7 @@
 
 Show the repository on GitHub: [https://github.com/reisportela/HDFE](https://github.com/reisportela/HDFE)
 
-1. Environments: `macOS Monterey`, `Windows Server 2019` and `Ubuntu 20.04` running on a container in MyBinder.
+1. Environments: `macOS Monterey`, `Windows Server 2019` and `Ubuntu 18.04` running on a container in MyBinder.
 2. Tools: `R`, `RStudio`, `VSCode`, `Python`, `Jupyter` and `Stata 16/17`.
 3. Packages:
     1. R: `fixest`, `haven`, `dplyr`, `plm`, `tictoc`, `data.table`
@@ -12,6 +12,13 @@ Show the repository on GitHub: [https://github.com/reisportela/HDFE](https://git
     5. Jupyter: kernels for `R`, `Julia`, `Stata`, `SoS`
 
 The Stata files used in the exercise include: `Stata_reghdfe_Benchmark.do`, `Group Fixed Effects.ipynb`, `Basics of REGHDFE.ipynb`. The datasets are available in this repository.
+
+### Container setup
+
+1. The R packages that are pre-installed in the container are defined in file `environment.yml`
+2. Ubuntu's packages are defined in file `apt.txt`
+3. 
+
 ## 1. Use [MyBinder](https://mybinder.org/) to run a container with R & RStudio + Julia
 
 Launch MyBinder with RStudio
