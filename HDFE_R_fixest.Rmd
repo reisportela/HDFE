@@ -34,6 +34,7 @@ nls <- read_dta("nlswork_regression.dta")
 ```
 
 ```{r A.1.1 Estimation}
+
 gravity_pois = fepois(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
 ```
 
