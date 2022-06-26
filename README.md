@@ -17,7 +17,9 @@ The Stata files used in the exercise include: `Stata_reghdfe_Benchmark.do`, `Gro
 
 1. The R packages that are pre-installed in the container are defined in file `environment.yml`
 2. Ubuntu's packages are defined in file `apt.txt`
-3. 
+3. Julia's kernel defined in `Project.toml`
+4. Additional OS specifications are defined in `start`
+
 
 ## 1. Use [MyBinder](https://mybinder.org/) to run a container with R & RStudio + Julia
 
