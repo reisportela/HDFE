@@ -20,6 +20,7 @@ library(here)
 library(tictoc)
 library(data.table)
 library(haven)
+library(plm)
 
 # install.packages("fixest",repos = c(ropensci = 'https://fastverse.r-universe.dev',CRAN = 'https://cloud.r-project.org'))
 
@@ -29,6 +30,7 @@ library(fixest)
 
 ```{r A.0 Data}
 data(trade)
+nls <- read_dta("nlswork_regression.dta")
 ```
 
 ```{r A.1.1 Estimation}
@@ -55,9 +57,17 @@ fepois(Euros ~ log(dist_km), trade, vcov = ~Product)
 ```
 
 ```{r A.1.4.1 Other estimation functions}
-gravity_ols = feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product + Year, trade)
+# gravity_ols = feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product + Year, trade)
+
+wages_plm <- plm(ln_wage ~ ttl_exp + union + not_smsa + nev_mar, model="within",nls, index=c("idcode"))
+summary(wages_plm)
+
 ```
 
+```{r}
+wages_feols <- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode,nls)
+summary(wages_feols)
+```
 
 ```{r A.1.4.2 Other estimation functions}
 gravity_negbin = fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)

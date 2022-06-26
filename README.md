@@ -10,6 +10,8 @@ Launch MyBinder with RStudio
 
 ## 2. Explore `fixest` in RStudio ecosystem
 
+
+
 ## 3. Open Visual Studio Code (locally)
 
 > Run the Julia script `HDFE_Julia_script.jl`
@@ -46,11 +48,11 @@ Dell server with 48 Cores & 512 GB RAM running Windows Server 2019.
 
 The fastest solution with an awesome ecosystem: 383.33 seconds (6.4 minutes).
 
-![](R_performance.png)
+![](R_performance_V3.png)
 
 ### Julia: fast but lacks an adequate ecosystem
 
-Not bad: 962.9 seconds (16.1 minutes)
+Not bad: 962.9 seconds (16.1 minutes).
 
 <img src="Julia_performance_V2.png" width="1300">
 

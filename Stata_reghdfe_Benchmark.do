@@ -67,6 +67,8 @@ use nlswork, clear
 	
 **# 1. Simple case - one fixed effect
 
+	xtreg ln_wage ttl_exp union not_smsa nev_mar, fe
+
 	reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode)
 		est store HDFE1
 
