@@ -28,26 +28,36 @@ Launch MyBinder with RStudio
 
 > Python is too slow: run in the sample using the notebook `HDFE_Python.ipynb` using VSCode
 
-### The data -- LEED sample
+### The data
+
+LEED sample.
 
 <img src="the_Data_Benchmark.png" width="400">
 
 
 ### R -- the state of the art
 
-![The fastest solution](R_performance.png)
+The fastest solution.
+
+![](R_performance.png)
 
 ### Julia -- fast but lacks an adequate ecosystem
 
-![Not bad](Julia_performance.png)
+Not bad.
+
+![](Julia_performance.png)
 
 ### Stata: not a match for R or Julia, as far as computation time is concerned
 
-![Too slow](Stata_performance.png)
+Too slow.
+
+![](Stata_performance.png)
 
 ### Python -- just a concept
 
-![Forget it](Python_performance.png)
+Forget it.
+
+![](Python_performance.png)
 
 
 <!--- 
