@@ -46,7 +46,7 @@ Dell server with 48 Cores & 512 GB RAM running Windows Server 2019.
 
 ### R: the state of the art
 
-The fastest solution with an awesome ecosystem: 383.33 seconds (6.4 minutes).
+The fastest solution with an awesome ecosystem: 411.21 seconds (6.9 minutes).
 
 ![](R_performance_V3.png)
 
