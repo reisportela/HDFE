@@ -6,10 +6,11 @@ clear all
 set more off
 set rmsg on
 
-cd /Users/miguelportela/Documents/GitHub/HDFE
+capture cd "B:/GitHub/HDFE"
+capture cd "/Users/miguelportela/Documents/GitHub/HDFE"
 
 capture log close
-log using HDFE_Benchmark.txt, text replace
+log using HDFE_Benchmark_V0.txt, text replace
 
 /*
 
@@ -41,6 +42,7 @@ webuse nlswork
 	save nlswork, replace
 */
 
+/*
 use nlswork, clear
 	des
 	sort idcode year
@@ -61,17 +63,28 @@ use nlswork, clear
 	sort idcode year
 	xtset idcode year
 	save nlswork_regression, replace
+*/
 
 // -- START -- //
+
+use nlswork_regression, clear
+
 	timer on 1
 	
 **# 1. Simple case - one fixed effect
 
 	xtreg ln_wage ttl_exp union not_smsa nev_mar, fe
-
+		est store FE
 	reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode)
 		est store HDFE1
 
+		esttab FE HDFE1, ///
+				drop(_cons) ///
+				mtitle("Model (1)" "Model (2)") nonumbers ///
+				coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA" nev_mar "Never married") ///
+				b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+				scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+				nonotes addnotes("Notes: standard errors in parenthesis." "Significance levels: *, 10\%; **, 5\%; ***, 1\%." "The dependent variable is log wage." "SMSA: standard metropolitan statistical area." "Model (7) is estimated by bootstrap. Source: own computations.")
 
 **# 2. As above, but also compute clustered standard errors
 

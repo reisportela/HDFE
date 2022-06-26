@@ -1,0 +1,300 @@
+----------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  B:\GitHub\HDFE\HDFE_Benchmark_V0.txt
+  log type:  text
+ opened on:  26 Jun 2022, 14:09:15
+r; t=0.01 14:09:15
+
+. 
+. /*
+> 
+> -- http://scorreia.com/software/reghdfe/
+> 
+>         * Install ftools (remove program if it existed previously)
+>         cap ado uninstall ftools
+>         net install ftools, from("https://raw.githubusercontent.com/sergiocorreia/ftools/master/src/")
+> 
+>         * Install reghdfe 6.x
+>         cap ado uninstall reghdfe
+>         net install reghdfe, from("https://raw.githubusercontent.com/sergiocorreia/reghdfe/master/src/")
+> 
+>         * Install parallel, if using the parallel() option; don't install from SSC
+>         cap ado uninstall parallel
+>         net install parallel, from(https://raw.github.com/gvegayon/parallel/stable/) replace
+>         mata mata mlib index
+> 
+>         cap ado uninstall ivreghdfe
+>         cap ssc install ivreg2 // Install ivreg2, the core package
+>         net install ivreghdfe, from(https://raw.githubusercontent.com/sergiocorreia/ivreghdfe/master/src/)
+> 
+> */
+. 
+. 
+. 
+. /*
+> webuse nlswork
+>         save nlswork, replace
+> */
+. 
+. /*
+> use nlswork, clear
+>         des
+>         sort idcode year
+>         xtset idcode year
+>         xtdes
+>         xtsum
+> 
+>         // -- DEFINE A COMMON SAMPLE
+>         
+>         egen nmiss = rowmiss(ln_wage ttl_exp union not_smsa nev_mar occ_code south idcode year)
+>                 tab nmiss
+>                         keep if nmiss == 0
+>                         drop nmiss
+>         
+>         keep ln_wage ttl_exp union not_smsa nev_mar occ_code south idcode year
+>         compress
+>         order idcode year
+>         sort idcode year
+>         xtset idcode year
+>         save nlswork_regression, replace
+> */
+. 
+. // -- START -- //
+. 
+. use nlswork_regression, clear
+(National Longitudinal Survey of Young Women, 14-24 years old in 1968)
+r; t=0.00 14:09:15
+
+. 
+.         timer on 1
+r; t=0.00 14:09:15
+
+.         
+. **# 1. Simple case - one fixed effect
+. 
+.         xtreg ln_wage ttl_exp union not_smsa nev_mar, fe
+
+Fixed-effects (within) regression               Number of obs     =     19,151
+Group variable: idcode                          Number of groups  =      4,142
+
+R-squared:                                      Obs per group:
+     Within  = 0.1354                                         min =          1
+     Between = 0.3003                                         avg =        4.6
+     Overall = 0.2201                                         max =         12
+
+                                                F(4,15005)        =     587.66
+corr(u_i, Xb) = 0.2424                          Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0005831    42.42   0.000     .0235937    .0258798
+       union |   .1020091   .0069487    14.68   0.000     .0883887    .1156294
+    not_smsa |  -.1006281   .0124436    -8.09   0.000    -.1250191   -.0762371
+     nev_mar |  -.0051586   .0099787    -0.52   0.605    -.0247181    .0144009
+       _cons |   1.569448   .0069169   226.90   0.000      1.55589    1.583006
+-------------+----------------------------------------------------------------
+     sigma_u |  .38390408
+     sigma_e |  .25623905
+         rho |   .6918034   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(4141, 15005) = 8.30                 Prob > F = 0.0000
+r; t=1.32 14:09:17
+
+.                 est store FE
+r; t=0.02 14:09:17
+
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 1 iterations)
+
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 1 HDFE group                            F(   4,  15005) =     587.66
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7529
+                                                  Adj R-squared   =     0.6957
+                                                  Within R-sq.    =     0.1354
+                                                  Root MSE        =     0.2562
+
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0247368   .0005831    42.42   0.000     .0235937    .0258798
+       union |   .1020091   .0069487    14.68   0.000     .0883887    .1156294
+    not_smsa |  -.1006281   .0124436    -8.09   0.000    -.1250191   -.0762371
+     nev_mar |  -.0051586   .0099787    -0.52   0.605    -.0247181    .0144009
+       _cons |   1.572064   .0069678   225.62   0.000     1.558407    1.585722
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+-----------------------------------------------------+
+r; t=0.61 14:09:17
+
+.                 est store HDFE1
+r; t=0.00 14:09:17
+
+. 
+.                 est tab FE HDFE1
+
+----------------------------------------
+    Variable |     FE         HDFE1     
+-------------+--------------------------
+     ttl_exp |  .02473678    .02473678  
+       union |  .10200907    .10200907  
+    not_smsa | -.10062808   -.10062808  
+     nev_mar | -.00515864   -.00515864  
+       _cons |  1.5694478    1.5720644  
+----------------------------------------
+r; t=0.11 14:09:17
+
+. 
+end of do-file
+
+r; t=2.09 14:09:17
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.                 esttab FE HDFE1, ///
+>                                 drop(_cons) ///
+>                                 mtitle("Model (1)" "Model (2)") nonumbers ///
+>                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA" nev_mar "Never married") ///
+>                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+>                                 nonotes addnotes("Notes: standard errors in parenthesis. Significance levels: *, 10\%; **, 5\%; ***, 1
+> \%. The dependent variable is" "log wage. SMSA: standard metropolitan statistical area. Model (7) is estimated by bootstrap. Source: o
+> wn computations.")
+
+--------------------------------------------
+                Model (1)       Model (2)   
+--------------------------------------------
+Experience         0.0247***       0.0247***
+                (0.00058)       (0.00058)   
+
+Union              0.1020***       0.1020***
+                (0.00695)       (0.00695)   
+
+Not SMSA          -0.1006***      -0.1006***
+                (0.01244)       (0.01244)   
+
+Never marr~d      -0.0052         -0.0052   
+                (0.00998)       (0.00998)   
+--------------------------------------------
+N                   19151           18486   
+R$^2$                0.14            0.75   
+RSS                985.21          985.21   
+--------------------------------------------
+Notes: standard errors in parenthesis. Significance levels: *, 10\%; **, 5\%; ***, 1\%. The dependent variable is
+log wage. SMSA: standard metropolitan statistical area. Model (7) is estimated by bootstrap. Source: own computations.
+r; t=0.12 14:10:13
+
+. 
+end of do-file
+
+r; t=0.13 14:10:13
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.                 esttab FE HDFE1, ///
+>                                 drop(_cons) ///
+>                                 mtitle("Model (1)" "Model (2)") nonumbers ///
+>                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA" nev_mar "Never married") ///
+>                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+>                                 nonotes addnotes("Notes: standard errors in parenthesis.","Significance levels: *, 10\%; **, 5\%; ***,
+>  1\%.","The dependent variable is log wage.", "SMSA: standard metropolitan statistical area.","Model (7) is estimated by bootstrap. So
+> urce: own computations.")
+
+--------------------------------------------
+                Model (1)       Model (2)   
+--------------------------------------------
+Experience         0.0247***       0.0247***
+                (0.00058)       (0.00058)   
+
+Union              0.1020***       0.1020***
+                (0.00695)       (0.00695)   
+
+Not SMSA          -0.1006***      -0.1006***
+                (0.01244)       (0.01244)   
+
+Never marr~d      -0.0052         -0.0052   
+                (0.00998)       (0.00998)   
+--------------------------------------------
+N                   19151           18486   
+R$^2$                0.14            0.75   
+RSS                985.21          985.21   
+--------------------------------------------
+Notes: standard errors in parenthesis.
+,"Significance
+levels:
+*,
+10\%;
+**,
+5\%;
+***,
+1\%.","The
+dependent
+variable
+is
+log
+wage.",
+SMSA: standard metropolitan statistical area.
+,"Model
+(7)
+is
+estimated
+by
+bootstrap.
+Source:
+own
+computations."
+r; t=0.09 14:11:14
+
+. 
+. 
+end of do-file
+
+r; t=0.10 14:11:14
+. do "C:\tmp\STD40a8_000000.tmp"
+
+.                 esttab FE HDFE1, ///
+>                                 drop(_cons) ///
+>                                 mtitle("Model (1)" "Model (2)") nonumbers ///
+>                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA" nev_mar "Never married") ///
+>                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
+>                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
+>                                 nonotes addnotes("Notes: standard errors in parenthesis." "Significance levels: *, 10\%; **, 5\%; ***,
+>  1\%." "The dependent variable is log wage." "SMSA: standard metropolitan statistical area." "Model (7) is estimated by bootstrap. Sou
+> rce: own computations.")
+
+--------------------------------------------
+                Model (1)       Model (2)   
+--------------------------------------------
+Experience         0.0247***       0.0247***
+                (0.00058)       (0.00058)   
+
+Union              0.1020***       0.1020***
+                (0.00695)       (0.00695)   
+
+Not SMSA          -0.1006***      -0.1006***
+                (0.01244)       (0.01244)   
+
+Never marr~d      -0.0052         -0.0052   
+                (0.00998)       (0.00998)   
+--------------------------------------------
+N                   19151           18486   
+R$^2$                0.14            0.75   
+RSS                985.21          985.21   
+--------------------------------------------
+Notes: standard errors in parenthesis.
+Significance levels: *, 10\%; **, 5\%; ***, 1\%.
+The dependent variable is log wage.
+SMSA: standard metropolitan statistical area.
+Model (7) is estimated by bootstrap. Source: own computations.
+r; t=0.08 14:12:10
+
+. 
+end of do-file
+
+r; t=0.08 14:12:10

@@ -1,0 +1,91 @@
+\documentclass[12pt]{article}
+
+\usepackage[onehalfspacing]{setspace}
+\usepackage{rotating}
+\usepackage{caption}
+\usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{threeparttable}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,textcomp}
+\usepackage{floatrow}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{longtable}
+
+\usepackage{natbib}
+\bibliographystyle{apalike}
+
+\usepackage{eurosym}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphics}
+
+\usepackage{verbatim}
+\usepackage{multirow}
+\usepackage{floatrow}
+
+	\floatsetup[table]{capposition=top}
+
+\usepackage{longtable}
+\usepackage{pdflscape}
+
+\usepackage[paperwidth=210mm,paperheight=297mm,left=27mm,right=27mm,top=25mm,bottom=25mm]{geometry}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{color, colortbl}
+
+	\definecolor{Gray}{gray}{0.9}
+	\definecolor{LightCyan}{rgb}{0.88,1,1}
+
+\usepackage{afterpage}
+
+\usepackage{soul}
+
+\usepackage[hyphens]{url}
+\usepackage[colorlinks,breaklinks=true]{hyperref}
+
+\hypersetup{pdfnewwindow=true}
+
+\hypersetup{
+     colorlinks   = true,
+     citecolor    = black
+}
+
+\hypersetup{linkcolor=blue!75!black}
+\hypersetup{urlcolor=blue!75!black}
+\hypersetup{filecolor=blue!75!black}
+\hypersetup{citecolor=black}
+
+\usepackage{lipsum}
+
+\begin{document}
+
+\title{Minimum wage and financially distressed firms: another one bites the dust\thanks{We are grateful to Ana Rute Cardoso from IAE-CSIC and Barcelona GSE, João Pereira dos Santos from Nova SBE, João Sousa Andrade from the University of Coimbra, Marta Silva and Pedro Portugal from the Bank of Portugal, and participants in a NIPE-University of Minho seminar for their comments.
+This work is financed by National Funds of the FCT – Portuguese Foundation for Science and Technology, projects UID/ECO/03182/2020, UIDB/05037/2020 and PTDC/EGE-ECO/29822/2017 (`It’s All About Productivity: contributions to the understanding of the sluggish performance of the Portuguese economy'). Hélder Costa acknowledges the funding by FCT, scholarship 2020.04643.BD.}}
+
+\author{F. Alexandre\thanks{NIPE/Universidade do Minho.}\quad P. Bação\thanks{Universidade de Coimbra, CeBER, FEUC.}\quad J. Cerejeira\thanks{NIPE/Universidade do Minho.}\quad H. Costa\thanks{NIPE/Universidade do Minho.}\quad M. Portela\thanks{Corresponding author; miguel.portela@eeg.uminho.pt. NIPE/Universidade do Minho and IZA Bonn.}}
+
+\maketitle
+
+
+\begin{abstract}
+\singlespacing {\small 
+Since late 2014, Portuguese Governments adopted ambitious minimum wage policies. Using linked employer-employee data, we provide an econometric evaluation of the impact of those policies. Our estimates suggest that minimum wage increases reduced employment growth and profitability, in particular for financially distressed firms. We also conclude that minimum wage increases had a positive impact on firms' exit, again amplified for financially distressed firms. According to these results, minimum wage policies may have had a supply side effect by accelerating the exit of low profitability and low productivity firms and, thus, contributing to improve aggregate productivity through a cleansing effect.}
+\end{abstract}
+
+\textbf{Keywords:} minimum wages, financially distressed firms, productivity
+
+\textbf{JEL Classification:} \textit{J38, L25}
+
+%%\newpage
+
+
+\section{Introduction}
+
+\lipsum[1-2]
+
+\input{Regressions.tex}
+
+\end{document}
