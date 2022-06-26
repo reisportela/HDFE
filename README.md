@@ -5,11 +5,11 @@ Show the repository on GitHub: [https://github.com/reisportela/HDFE](https://git
 1. Environments: `macOS Monterey`, `Windows Server 2019` and `Ubuntu 20.04` running on a container in MyBinder.
 2. Tools: `R`, `RStudio`, `VSCode`, `Python`, `Jupyter` and `Stata 16/17`.
 3. Packages:
-  2.1. R: `fixest`, `haven`, `dplyr`, `plm`, `tictoc`, `data.table`
-  2.2. Julia: `RData`, `DelimitedFiles`, `FixedEffectModels`, `DataFrames`, `CSV`, `RDatasets`, `ReadStat`, `StatFiles`
-  2.3. Stata: `reghdfe`
-  2.4. Python: `pyhdfe`
-  2.5. Jupyter: kernels for `R`, `Julia`, `Stata`, `SoS`
+    1. R: `fixest`, `haven`, `dplyr`, `plm`, `tictoc`, `data.table`
+    2. Julia: `RData`, `DelimitedFiles`, `FixedEffectModels`, `DataFrames`, `CSV`, `RDatasets`, `ReadStat`, `StatFiles`
+    3. Stata: `reghdfe`
+    4. Python: `pyhdfe`
+    5. Jupyter: kernels for `R`, `Julia`, `Stata`, `SoS`
 
 The Stata files used in the exercise include: `Stata_reghdfe_Benchmark.do`, `Group Fixed Effects.ipynb`, `Basics of REGHDFE.ipynb`. The datasets are available in this repository.
 ## 1. Use [MyBinder](https://mybinder.org/) to run a container with R & RStudio + Julia
