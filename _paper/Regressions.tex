@@ -312,3 +312,38 @@
 \par\endgroup
 
 
+
+\begingroup
+\centering
+\begin{tabular}{lccc}
+   \tabularnewline \midrule \midrule
+   Dependent Variable: & \multicolumn{3}{c}{ln\_wage}\\
+                  & Base            & No Singleton    & Org. IID \\   
+   Model:         & (1)             & (2)             & (3)\\  
+   \midrule
+   \emph{Variables}\\
+   ttl\_exp       & 0.0437$^{***}$  &                 & 0.0437$^{***}$\\   
+                  & (0.0023)        &                 & (0.0016)\\   
+   union          & 0.1012$^{***}$  & 0.1005$^{***}$  & 0.1012$^{***}$\\   
+                  & (0.0095)        & (0.0096)        & (0.0069)\\   
+   not\_smsa      & -0.0940$^{***}$ & -0.0970$^{***}$ & -0.0940$^{***}$\\   
+                  & (0.0188)        & (0.0187)        & (0.0124)\\   
+   nev\_mar       & -0.0213         & -0.0104         & -0.0213$^{**}$\\   
+                  & (0.0138)        & (0.0137)        & (0.0102)\\   
+   log(ttl\_exp)  &                 & 0.1799$^{***}$  &   \\   
+                  &                 & (0.0120)        &   \\   
+   \midrule
+   \emph{Fixed-effects}\\
+   idcode         & Yes             & Yes             & Yes\\  
+   year           & Yes             & Yes             & Yes\\  
+   \midrule
+   \emph{Fit statistics}\\
+   Observations   & 18,486          & 18,485          & 18,486\\  
+   R$^2$          & 0.75627         & 0.75272         & 0.75627\\  
+   Within R$^2$   & 0.06629         & 0.05265         & 0.06629\\  
+   \midrule \midrule
+   \multicolumn{4}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+\end{tabular}
+\par\endgroup
+
+

@@ -97,66 +97,23 @@ etable(wages_feols,wages_feols_nos,wages_feols_nos_iid,vcov = "twoway", headers 
 ```
 
 
-```{r A.1.5.2 Viewing the results in R}
-gravity_subfe = list()
-all_FEs = c("Year", "Destination", "Origin")
-for(i in 0:3){
-    gravity_subfe[[i+1]] = fepois(Euros ~ log(dist_km), trade, fixef = all_FEs[0:i])
-}
-```
-
-```{r}
-wages_subfe = list()
-W_all_FEs = c("idcode","year")
-for(i in 0:1){
-    wages_subfe[[i+1]] = feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar,nls, fixef = W_all_FEs[0:i])
-}
+```{r A.1.11 Exporting the results to Latex}
+etable(wages_feols,wages_feols_nos,wages_feols_nos_iid,
+         headers = c("Base","No Singleton","Org. IID"), tex = TRUE, file = "_paper/Regressions.tex")
 ```
 
 
-```{r A.1.5.3 Viewing the results in R}
-etable(gravity_subfe, cluster = ~Origin+Destination)
-```
 
-```{r}
-etable(wages_subfe, cluster = ~idcode+year)
-```
-
-
-```{r A.1.6 Multiple estimations}
-res_multi = fepois(Euros ~ log(dist_km) | csw0(Year, Destination, Origin), trade)
-```
-
-```{r A.1.7 Exporting the results to Latex}
-# with two-way clustered SEs
-etable(res_multi, cluster = ~Origin+Destination, tex = TRUE,file = "_paper/Regressions.tex")
-```
-
-
-```{r A.1.7.1 An elaborate example}
-# we set the dictionary once and for all
-myDict = c("log(dist_km)" = "$\\ln (Distance)$", "(Intercept)" = "Constant")
-# 1st export: we change the signif code and drop the intercept
-etable(res_multi, signifCode = c("a" = 0.01, "b" = 0.05),
-       drop = "Const", dict = myDict, file = "Estimation Tables.tex", 
-       replace = TRUE, title = "First export -- normal Standard-errors")
-# 2nd export: clustered S-E + distance as the first coefficient
-etable(res_multi, cluster = ~Product, order = "Dist", 
-       dict = myDict, file = "Estimation Tables.tex", 
-       title = "Second export -- clustered standard-errors (on Product variable)")
-```
-
-
-```{r A.1.8 Extracting the fixed-effects coefficients}
-fixedEffects = fixef(gravity_pois)
+```{r A.12 Extracting the fixed-effects coefficients}
+fixedEffects = fixef(wages_feols)
 summary(fixedEffects)
 
-fixedEffects$Year
+wages_feols$idcode
 
 ```
 
 
-```{r}
+```{r A.13 Plot the fixed-effects coefficients}
 plot(fixedEffects)
 ```
 
