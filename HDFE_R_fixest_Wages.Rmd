@@ -63,7 +63,7 @@ summary(wages_feols_nos_cluster)
 wages_feols_nos_cluster <- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode + year,nls,vcov = ~idcode + year,fixef.rm = "singleton")
 summary(wages_feols_nos_cluster)
 ```
-```{r A.6 Wages FEOLS - Cluster by idcode and year and NoSingleton}
+```{r A.6 Wages FEOLS - Cluster by idcode and year and NoSingleton twoway}
 wages_feols_nos_cluster <- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode + year,nls,vcov = "twoway",fixef.rm = "singleton")
 summary(wages_feols_nos_cluster)
 ```
@@ -77,19 +77,19 @@ summary(wages_feols,vcov = "iid")
 summary(wages_feols_nos,vcov = "iid")
 ```
 
-```{r A.8 Wages FEOLS - Cluster by idcode and NoSingleton and other var transform}
+```{r A.7 Wages FEOLS - Cluster by idcode and NoSingleton and other var transform}
 wages_feols_nos <- feols(ln_wage ~ log(ttl_exp) + union + not_smsa + nev_mar | idcode + year,nls,fixef.rm = "singleton")
 summary(wages_feols_nos)
 ```
 
 
-```{r A.9 Wages FEOLS - Cluster by idcode and NoSingleton and other features}
+```{r A.8 Wages FEOLS - Cluster by idcode and NoSingleton and other features}
 wages_feols <- feols(ln_wage ~ ttl_exp + union + not_smsa + nev_mar | idcode + year,nls,fixef.tol = 1e-6,fixef.iter = 200,fixef.rm = "singleton")
 summary(wages_feols_nos)
 ```
 
 
-```{r A.10 Viewing the results in R}
+```{r A.9 Viewing the results in R}
 etable(wages_feols,wages_feols_nos,wages_feols_nos_iid,
          headers = c("Base","No Singleton","Org. IID"))
 
@@ -97,7 +97,7 @@ etable(wages_feols,wages_feols_nos,wages_feols_nos_iid,vcov = "twoway", headers 
 ```
 
 
-```{r A.1.11 Exporting the results to Latex}
+```{r A.10 Exporting the results to Latex}
 etable(wages_feols,wages_feols_nos,wages_feols_nos_iid,
          headers = c("Base","No Singleton","Org. IID"), tex = TRUE, file = "_paper/Regressions.tex")
 ```
@@ -113,7 +113,7 @@ wages_feols$idcode
 ```
 
 
-```{r A.13 Plot the fixed-effects coefficients}
+```{r A.11 Plot the fixed-effects coefficients}
 plot(fixedEffects)
 ```
 

@@ -29,7 +29,22 @@ Launch MyBinder with RStudio
 
 ## 2. Explore `fixest` in RStudio ecosystem
 
+This is an adaptation of Laurent Berge and Grant McDermott's walk-through `fixest`. Full information available [here](https://cran.r-project.org/web/packages/fixest/vignettes/fixest_walkthrough.html). The Stata companion file is `Stata_reghdfe_Benchmark.do` in this repository.
 
+### The steps
+
+1. My first model
+2. NoSingleton
+3. IID and NoSingleton
+4. Cluster by idcode and NoSingleton
+5. Cluster by idcode and year and NoSingleton
+6. Cluster by idcode and year and NoSingleton twoway
+7. Cluster by idcode and NoSingleton and other variable transformation
+8. Cluster by idcode and NoSingleton and other features
+9. Viewing the results in R
+10. Exporting the results to Latex
+11. Plot the fixed-effects coefficients}
+12. 
 
 ## 3. Open Visual Studio Code (locally)
 
