@@ -44,7 +44,7 @@ This is an adaptation of Laurent Berge and Grant McDermott's walk-through `fixes
 9. Viewing the results in R
 10. Exporting the results to Latex
 11. Plot the fixed-effects coefficients}
-12. 
+12. Interactions
 
 ## 3. Open Visual Studio Code (locally)
 
