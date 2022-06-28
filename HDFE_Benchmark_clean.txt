@@ -2,8 +2,8 @@
       name:  <unnamed>
        log:  /Users/miguelportela/Documents/GitHub/HDFE/HDFE_Benchmark_clean.txt
   log type:  text
- opened on:  26 Jun 2022, 23:22:44
-r; t=0.00 23:22:44
+ opened on:  27 Jun 2022, 09:53:01
+r; t=0.00 9:53:01
 
 . 
 . /*
@@ -83,18 +83,18 @@ r; t=0.00 23:22:44
 . 
 . use nlswork_regression, clear
 (National Longitudinal Survey of Young Women, 14-24 years old in 1968)
-r; t=0.00 23:22:44
+r; t=0.00 9:53:01
 
 . xtset idcode year
 
 Panel variable: idcode (unbalanced)
  Time variable: year, 70 to 88, but with gaps
          Delta: 1 unit
-r; t=0.01 23:22:44
+r; t=0.02 9:53:01
 
 . 
 .         timer on 1
-r; t=0.00 23:22:44
+r; t=0.00 9:53:01
 
 .         
 . **# 1. Simple case - one fixed effect
@@ -127,10 +127,10 @@ Absorbed degrees of freedom:
 -------------+---------------------------------------|
       idcode |      3477           0        3477     |
 -----------------------------------------------------+
-r; t=0.19 23:22:44
+r; t=0.20 9:53:02
 
 .                 est store HDFE1
-r; t=0.00 23:22:44
+r; t=0.00 9:53:02
 
 . 
 . **# 2. As above, but also compute clustered standard errors
@@ -166,10 +166,10 @@ Absorbed degrees of freedom:
 -------------+---------------------------------------|
       idcode |      3477           0        3477     |
 -----------------------------------------------------+
-r; t=0.03 23:22:44
+r; t=0.05 9:53:02
 
 .                 est store HDFE1cluster
-r; t=0.00 23:22:44
+r; t=0.00 9:53:02
 
 . 
 . 
@@ -216,10 +216,10 @@ corr(u_i, Xb) = 0.1566                          Prob > F          =     0.0000
          rho |  .68108568   (fraction of variance due to u_i)
 ------------------------------------------------------------------------------
 F test that all u_i=0: F(4141, 14994) = 8.18                 Prob > F = 0.0000
-r; t=0.06 23:22:44
+r; t=0.07 9:53:02
 
 .                 est store FE2
-r; t=0.00 23:22:44
+r; t=0.00 9:53:02
 
 . 
 .         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
@@ -251,48 +251,52 @@ Absorbed degrees of freedom:
       idcode |      3477           0        3477     |
         year |        12           1          11     |
 -----------------------------------------------------+
-r; t=0.08 23:22:44
+r; t=0.08 9:53:02
 
 .                 est store HDFE2
-r; t=0.00 23:22:44
+r; t=0.00 9:53:02
 
 . 
-.                 esttab FE2 HDFE2, ///
->                                 keep(ttl_exp union not_smsa nev_mar) ///
->                                 mtitle("Model (1)" "Model (2)") nonumbers ///
->                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA" nev_mar "Never married") ///
->                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
->                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
->                                 nonotes addnotes("Notes: standard errors in parenthesis." "Significance levels: *, 10\%; **, 5\%; ***, 1\%." "The depende
-> nt variable is log wage." "SMSA: standard metropolitan statistical area." "Model (7) is estimated by bootstrap. Source: own computations.")
+end of do-file
 
---------------------------------------------
-                Model (1)       Model (2)   
---------------------------------------------
-Experience         0.0437***       0.0437***
-                (0.00160)       (0.00160)   
+r; t=0.55 9:53:02
+. do "/var/folders/jn/45p43wcj7sz8v9scyjv_0l6h0000gn/T//SD65210.000000"
 
-Union              0.1012***       0.1012***
-                (0.00693)       (0.00693)   
+.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year)
+(dropped 665 singleton observations)
+(MWFE estimator converged in 7 iterations)
 
-Not SMSA          -0.0940***      -0.0940***
-                (0.01238)       (0.01238)   
+HDFE Linear regression                            Number of obs   =     18,486
+Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7563
+                                                  Adj R-squared   =     0.6995
+                                                  Within R-sq.    =     0.0663
+                                                  Root MSE        =     0.2546
 
-Never marr~d      -0.0213**       -0.0213** 
-                (0.01023)       (0.01023)   
---------------------------------------------
-N                   19151           18486   
-R$^2$                0.15            0.76   
-RSS                971.94          971.94   
---------------------------------------------
-Notes: standard errors in parenthesis.
-Significance levels: *, 10\%; **, 5\%; ***, 1\%.
-The dependent variable is log wage.
-SMSA: standard metropolitan statistical area.
-Model (7) is estimated by bootstrap. Source: own computations.
-r; t=0.03 23:22:44
+------------------------------------------------------------------------------
+     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
+       union |    .101249   .0069266    14.62   0.000      .087672     .114826
+    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
+     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
+       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+      idcode |      3477           0        3477     |
+        year |        12           1          11     |
+-----------------------------------------------------+
+r; t=0.13 11:14:25
 
 . 
+end of do-file
+
+r; t=0.13 11:14:25
 . reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year) vce(cluster idcode)
 (dropped 665 singleton observations)
 (MWFE estimator converged in 7 iterations)
@@ -325,410 +329,6 @@ Absorbed degrees of freedom:
         year |        12           1          11     |
 -----------------------------------------------------+
 * = FE nested within cluster; treated as redundant for DoF computation
-r; t=0.06 23:22:45
+r; t=0.12 11:20:08
 
 . 
-.         // ... and three fixed effects
-.                                 
-.                                 reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode year occ_code)
-(dropped 665 singleton observations)
-(MWFE estimator converged in 17 iterations)
-
-HDFE Linear regression                            Number of obs   =     18,486
-Absorbing 3 HDFE groups                           F(   4,  14982) =     245.28
-                                                  Prob > F        =     0.0000
-                                                  R-squared       =     0.7636
-                                                  Adj R-squared   =     0.7083
-                                                  Within R-sq.    =     0.0615
-                                                  Root MSE        =     0.2508
-
-------------------------------------------------------------------------------
-     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-     ttl_exp |    .041726   .0015802    26.41   0.000     .0386286    .0448234
-       union |   .0922451   .0068775    13.41   0.000     .0787644    .1057258
-    not_smsa |  -.0959395   .0122072    -7.86   0.000    -.1198672   -.0720118
-     nev_mar |  -.0210052   .0100888    -2.08   0.037    -.0407804     -.00123
-       _cons |   1.443052   .0133288   108.27   0.000     1.416926    1.469178
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
-      idcode |      3477           0        3477     |
-        year |        12           1          11     |
-    occ_code |        13           1          12    ?|
------------------------------------------------------+
-? = number of redundant parameters may be higher
-r; t=0.14 23:22:45
-
-.                 est store HDFE3
-r; t=0.00 23:22:45
-
-. 
-. 
-. **# 4. Advanced examples
-. 
-. **# 4.1 Save the FEs as variables
-. 
-.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(FE1=idcode FE2=year)
-(dropped 665 singleton observations)
-(MWFE estimator converged in 7 iterations)
-
-HDFE Linear regression                            Number of obs   =     18,486
-Absorbing 2 HDFE groups                           F(   4,  14994) =     266.12
-                                                  Prob > F        =     0.0000
-                                                  R-squared       =     0.7563
-                                                  Adj R-squared   =     0.6995
-                                                  Within R-sq.    =     0.0663
-                                                  Root MSE        =     0.2546
-
-------------------------------------------------------------------------------
-     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-     ttl_exp |   .0436696   .0015976    27.34   0.000     .0405382     .046801
-       union |    .101249   .0069266    14.62   0.000      .087672     .114826
-    not_smsa |  -.0940314   .0123759    -7.60   0.000    -.1182897   -.0697731
-     nev_mar |  -.0212838   .0102299    -2.08   0.037    -.0413358   -.0012319
-       _cons |   1.425209   .0134793   105.73   0.000     1.398788     1.45163
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
-      idcode |      3477           0        3477     |
-        year |        12           1          11     |
------------------------------------------------------+
-r; t=0.13 23:22:45
-
-.                 est store HDFE4
-r; t=0.00 23:22:45
-
-. 
-. 
-. **# 4.2 Interactions in the absorbed variables (notice that only the # symbol is allowed)
-. 
-.         reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode#occ)
-(dropped 2810 singleton observations)
-(MWFE estimator converged in 1 iterations)
-
-HDFE Linear regression                            Number of obs   =     16,341
-Absorbing 1 HDFE group                            F(   4,  12345) =     441.32
-                                                  Prob > F        =     0.0000
-                                                  R-squared       =     0.8196
-                                                  Adj R-squared   =     0.7612
-                                                  Within R-sq.    =     0.1251
-                                                  Root MSE        =     0.2222
-
-------------------------------------------------------------------------------
-     ln_wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-     ttl_exp |   .0227197   .0005909    38.45   0.000     .0215615    .0238779
-       union |   .0627182   .0070749     8.86   0.000     .0488503    .0765862
-    not_smsa |  -.0771697   .0132357    -5.83   0.000    -.1031138   -.0512256
-     nev_mar |   .0087503   .0099935     0.88   0.381    -.0108385     .028339
-       _cons |   1.602598   .0071944   222.75   0.000     1.588496      1.6167
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------------+
-       Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------------+---------------------------------------|
-   idcode#occ_code |      3992           0        3992     |
------------------------------------------------------------+
-r; t=0.02 23:22:45
-
-.                 est store HDFE5
-r; t=0.00 23:22:45
-
-. 
-. 
-. **# 5. Parallel computation
-. 
-. **# 5.1 Using the parallel option in reghdfe
-. 
-.         // reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode#occ) parallel // -- DOES NOT WORK ON A MAC M1
-. 
-. 
-. **# 5.2 Using the parallel command
-. 
-. **# 5.2.1 Setup
-. 
-. /*
->         net install parallel, from(https://raw.github.com/gvegayon/parallel/master/) replace
->         mata mata mlib index
-> */
-. 
-. 
-. **# 5.2.2 Initialize
-. 
-.         parallel initialize 4
-N Child processes: 4
-Stata dir:  /Applications/Stata 17/StataMP.app/Contents/MacOS/stata-mp
-r; t=0.10 23:22:45
-
-. 
-. **# 5.2.3 Estimation with bootstrap
-. 
-.         parallel bs: reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode#occ)
---------------------------------------------------------------------------------
-Parallel Computing with Stata
-Child processes: 4
-pll_id         : 37ds5j5om5
-Running at     : /Users/miguelportela/Documents/GitHub/HDFE
-Randtype       : datetime
-
-Waiting for the child processes to finish...
-child process 0001 has exited without error...
-child process 0002 has exited without error...
-child process 0003 has exited without error...
-child process 0004 has exited without error...
---------------------------------------------------------------------------------
-Enter -parallel printlog #- to checkout logfiles.
---------------------------------------------------------------------------------
-
-parallel bootstrapping                                  Number of obs = 16,341
-                                                        Replications  =     50
-
-      Command: reghdfe ln_wage ttl_exp union not_smsa nev_mar, absorb(idcode#occ)
-
-------------------------------------------------------------------------------
-             |   Observed   Bootstrap                         Normal-based
-             | coefficient  std. err.      z    P>|z|     [95% conf. interval]
--------------+----------------------------------------------------------------
-     ttl_exp |   .0227197   .0005644    40.25   0.000     .0216135    .0238259
-       union |   .0627182   .0083938     7.47   0.000     .0462667    .0791698
-    not_smsa |  -.0771697   .0180137    -4.28   0.000    -.1124759   -.0418635
-     nev_mar |   .0087503   .0134643     0.65   0.516    -.0176393    .0351398
-       _cons |   1.602598   .0089846   178.37   0.000     1.584989    1.620208
-------------------------------------------------------------------------------
-r; t=1.16 23:22:46
-
-.         est store HDFEbs
-r; t=0.00 23:22:46
-
-. 
-. 
-. **# 6. Output Table
-. 
-. **# 6.1 Exporting to a Tex file
-. 
-.         esttab HDFE1 HDFE1cluster HDFE2 HDFE3 HDFE4 HDFE5 using regression_analysis.tex, replace ///
->                                 drop(_cons) ///
->                                 mtitle("Model (1)" "Model (2)" "Model (3)" "Model (4)" "Model (5)" "Model (6)" "Model (7)") nonumbers ///
->                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA" nev_mar "Never married") ///
->                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
->                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
->                                 nonotes addnotes("Notes: standard errors in parenthesis. Significance levels: *, 10\%; **, 5\%; ***, 1\%. The dependent v
-> ariable is" "log wage. SMSA: standard metropolitan statistical area. Model (7) is estimated by bootstrap. Source: own computations.")
-(output written to regression_analysis.tex)
-r; t=0.04 23:22:46
-
-. 
-. 
-. **# 6.2 Print in Stata Results
-. 
-.                 esttab HDFE1 HDFE1cluster HDFE2 HDFE3 HDFE4 HDFE5 HDFEbs, ///
->                                 drop(_cons) ///
->                                 mtitle("Model (1)" "Model (2)" "Model (3)" "Model (4)" "Model (5)" "Model (6)" "Model (7)") nonumbers ///
->                                 coeflabel (ttl_exp "Experience" union "Union" not_smsa "Not SMSA" nev_mar "Never married") ///
->                                 b(%5.4f) se(%6.5f) sfmt(%7.2f) star(* 0.1 ** 0.05 *** 0.01) ///
->                                 scalars("N Observations" "r2 R$^2$" "rss RSS") ///
->                                 nonotes addnotes("Notes: standard errors in parenthesis. Significance levels: *, 10\%; **, 5\%; ***, 1\%. The dependent v
-> ariable is" "log wage. SMSA: standard metropolitan statistical area. Model (7) is estimated by bootstrap. Source: own computations.")
-
-----------------------------------------------------------------------------------------------------------------------------
-                Model (1)       Model (2)       Model (3)       Model (4)       Model (5)       Model (6)       Model (7)   
-----------------------------------------------------------------------------------------------------------------------------
-Experience         0.0247***       0.0247**        0.0437***       0.0417***       0.0437***       0.0227***       0.0227***
-                (0.00058)       (0.00074)       (0.00160)       (0.00158)       (0.00160)       (0.00059)       (0.00056)   
-
-Union              0.1020***       0.1020**        0.1012***       0.0922***       0.1012***       0.0627***       0.0627***
-                (0.00695)       (0.00438)       (0.00693)       (0.00688)       (0.00693)       (0.00707)       (0.00839)   
-
-Not SMSA          -0.1006***      -0.1006         -0.0940***      -0.0959***      -0.0940***      -0.0772***      -0.0772***
-                (0.01244)       (0.03586)       (0.01238)       (0.01221)       (0.01238)       (0.01324)       (0.01801)   
-
-Never marr~d      -0.0052         -0.0052         -0.0213**       -0.0210**       -0.0213**        0.0088          0.0088   
-                (0.00998)       (0.01602)       (0.01023)       (0.01009)       (0.01023)       (0.00999)       (0.01346)   
-----------------------------------------------------------------------------------------------------------------------------
-N                   18486           18486           18486           18486           18486           16341           16341   
-R$^2$                0.75            0.75            0.76            0.76            0.76            0.82                   
-RSS                985.21          985.21          971.94          942.74          971.94          609.28                   
-----------------------------------------------------------------------------------------------------------------------------
-Notes: standard errors in parenthesis. Significance levels: *, 10\%; **, 5\%; ***, 1\%. The dependent variable is
-log wage. SMSA: standard metropolitan statistical area. Model (7) is estimated by bootstrap. Source: own computations.
-r; t=0.03 23:22:46
-
-. 
-. 
-. **# 7. Group Examples
-. 
-. **# 7.1 Setup
-.         //webuse toy-patents-long, clear
-.         
-.         use toy-patents-long, clear
-(1978 Automobile Data)
-r; t=0.00 23:22:46
-
-.                 order inventor_id patent_id year
-r; t=0.00 23:22:46
-
-.                 sort inventor_id patent_id year
-r; t=0.00 23:22:46
-
-. 
-.         // ssc install moremata
-. 
-. **# 7.2 Individual (inventor) & group (patent) fixed effects
-.         
-.         reghdfe citations funding, a(inventor_id) group(patent_id) individual(inventor_id)
-(MWFE estimator converged in 17 iterations)
-
-HDFE Linear regression                            Number of obs   =         74
-Absorbing 1 HDFE group                            F(   1,     53) =       6.09
-                                                  Prob > F        =     0.0168
-                                                  R-squared       =     0.3651
-                                                  Adj R-squared   =     0.1256
-                                                  Within R-sq.    =     0.1031
-                                                  Root MSE        =     2.4254
-
-------------------------------------------------------------------------------
-   citations | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-     funding |    .972201   .3938642     2.47   0.017     .1822094    1.762193
-       _cons |    .571309   1.222221     0.47   0.642    -1.880156    3.022774
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
- inventor_id |        20           0          20    ?|
------------------------------------------------------+
-? = number of redundant parameters may be higher
-r; t=0.08 23:22:46
-
-. 
-. 
-. **# 7.3 Individual & group fixed effects, with an additional standard fixed effects variable
-. 
-.         reghdfe citations funding, a(year inventor_id) group(patent_id) individual(inventor_id)
-(dropped 4 singleton observations)
-(MWFE estimator converged in 31 iterations)
-
-HDFE Linear regression                            Number of obs   =         70
-Absorbing 2 HDFE groups                           F(   1,     35) =       2.30
-                                                  Prob > F        =     0.1387
-                                                  R-squared       =     0.5869
-                                                  Adj R-squared   =     0.1855
-                                                  Within R-sq.    =     0.0616
-                                                  Root MSE        =     2.3957
-
-------------------------------------------------------------------------------
-   citations | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-     funding |  -1.754013   1.157654    -1.52   0.139    -4.104176    .5961506
-       _cons |   8.774618   3.498263     2.51   0.017     1.672766    15.87647
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
-        year |        14           0          14     |
- inventor_id |        20           0          20    ?|
------------------------------------------------------+
-? = number of redundant parameters may be higher
-r; t=0.02 23:22:46
-
-. 
-. 
-. **# 7.4 Individual & group fixed effects, specifying with a different method of aggregation (sum)
-. 
-.         reghdfe citations funding, a(inventor_id) group(patent_id) individual(inventor_id) aggreg(sum)
-(MWFE estimator converged in 18 iterations)
-
-HDFE Linear regression                            Number of obs   =         74
-Absorbing 1 HDFE group                            F(   1,     53) =      23.62
-                                                  Prob > F        =     0.0000
-                                                  R-squared       =     0.3157
-                                                  Adj R-squared   =     0.0574
-                                                  Within R-sq.    =     0.3083
-                                                  Root MSE        =     2.5181
-
-------------------------------------------------------------------------------
-   citations | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-     funding |   .9348217     .19234     4.86   0.000     .5490366    1.320607
-       _cons |   .6841741   .6503626     1.05   0.298    -.6202881    1.988636
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
- inventor_id |        20           0          20    ?|
------------------------------------------------------+
-? = number of redundant parameters may be higher
-r; t=0.02 23:22:46
-
-. 
-. 
-. **# -- If theory suggests that the effect of multiple authors will enter additively, as opposed to the average effect of the group of authors, this would
->  be the appropriate treatment.  Mean is the default method.
-. 
-. **# 7.5 Use one observation per group
-. 
-.         reghdfe citations funding, a(year) group(patent_id)
-(dropped 4 singleton observations)
-(MWFE estimator converged in 1 iterations)
-
-HDFE Linear regression                            Number of obs   =         70
-Absorbing 1 HDFE group                            F(   1,     55) =       6.94
-                                                  Prob > F        =     0.0109
-                                                  R-squared       =     0.4787
-                                                  Adj R-squared   =     0.3460
-                                                  Within R-sq.    =     0.1120
-                                                  Root MSE        =     2.1468
-
-------------------------------------------------------------------------------
-   citations | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-     funding |  -1.992381   .7563906    -2.63   0.011    -3.508221     -.47654
-       _cons |   9.492514   2.292438     4.14   0.000     4.898367    14.08666
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
-        year |        14           0          14     |
------------------------------------------------------+
-r; t=0.01 23:22:46
-
-. 
-. 
-. // -- END -- //
-. 
-.         timer off 1
-r; t=0.00 23:22:46
-
-.         timer list 1
-   1:      2.27 /        1 =       2.2690
-r; t=0.00 23:22:46
-
-.         di _new(1) "MINUTES: " %9.2f r(t1)/60
-
-MINUTES:      0.04
-r; t=0.00 23:22:46
-
-. 
-. log close
-      name:  <unnamed>
-       log:  /Users/miguelportela/Documents/GitHub/HDFE/HDFE_Benchmark_clean.txt
-  log type:  text
- closed on:  26 Jun 2022, 23:22:46
------------------------------------------------------------------------------------------------------------------------------------------------------------
